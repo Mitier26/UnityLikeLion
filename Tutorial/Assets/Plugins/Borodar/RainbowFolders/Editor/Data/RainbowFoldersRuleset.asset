@@ -407,5 +407,5 @@ MonoBehaviour:
     IsIconRecursive: 0
     BackgroundType: 70
     BackgroundTexture: {fileID: 0}
-    IsBackgroundRecursive: 0
+    IsBackgroundRecursive: 1
     IsHidden: 0
