@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
@@ -45,12 +46,22 @@ public class CharacterMovement : MonoBehaviour
         //}
 
         // Input Manager
-        
+        // 입력 받기
+        // 유니티 내부에 있는 Input Manager를 이용한 방법
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+        // Horizonatal과 Vertical은 유니티 세팅에서 정한 것
+        // GetAxis는 ( -1 ~ 1 ) 사이의 값을 뱉어낸다.
+        // GetAxisRaw는 ( -1, 0, 1 ) 값을 뱉어낸다.
 
         Vector3 dir = new Vector3(h, 0, v).normalized;
+        // normalized : 정규화
+        // 위와 오른쪽을 동시에 누르면 삼각함수로 인해 이동 값이 '루트2'가 된다.
+        // 대각선 이동이 더 빨라지는 버그가 발생
+        // 이것을 막고 방향벡터로 만드는 방법 = normalized
 
+        // transform.position : 월드 좌표 기준으로 이동하는 방법
+        // 방향 * 속도 * 프레임 보정
         transform.position += dir * speed * Time.deltaTime;
     }
 }
