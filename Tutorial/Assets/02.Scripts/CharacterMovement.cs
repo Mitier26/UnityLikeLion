@@ -6,50 +6,75 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public float speed;
+    private Rigidbody rigidbody;
+    public float speed = 2;
+    public float jumpPower = 4f;
+    public bool isGround;
     private Vector3 movement;
+
     private void Start()
     {
-        // transform.position += Vector3.forward;
+        rigidbody = GetComponent<Rigidbody>();
+        // OneStepMove();
     }
 
     private void Update()
     {
-        // float horizontal = Input.GetAxis("Horizontal");
-        // float vertical = Input.GetAxis("Vertical");
+       Move();
+       
+       Jump();
+    }
 
-        // transform.position += new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime; 
-        // transform.Translate(new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
+    private void OneStepMove()
+    {
+        transform.position += Vector3.forward;
+    }
+    private void AxisMove()
+    {
+        
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
-        // transform.position += Vector3.forward * Time.deltaTime;
+        transform.position += new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime; 
+        transform.Translate(new Vector3(horizontal, 0, vertical) * speed * Time.deltaTime);
 
-        // movement.x = Input.GetAxis("Horizontal");
-        // movement.z = Input.GetAxis("Vertical");
-        // movement.Normalize();
-        // transform.position += movement * speed * Time.deltaTime;
+        transform.position += Vector3.forward * Time.deltaTime;
 
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    transform.position += transform.forward * speed * Time.deltaTime;
-        //}
-        //else if (Input.GetKey(KeyCode.S))
-        //{
-        //    transform.position -= transform.forward * speed * Time.deltaTime;
-        //}
-        //else if (Input.GetKey(KeyCode.A))
-        //{
-        //    transform.position -= transform.right * speed * Time.deltaTime;
-        //}
-        //else if (Input.GetKey(KeyCode.D))
-        //{
-        //    transform.position += transform.right * speed * Time.deltaTime;
-        //}
+        movement.x = Input.GetAxis("Horizontal");
+        movement.z = Input.GetAxis("Vertical");
+        movement.Normalize();
+        transform.position += movement * speed * Time.deltaTime;
+    }
 
+    private void InputMove()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            transform.position += transform.forward * speed * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            transform.position -= transform.forward * speed * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            transform.position -= transform.right * speed * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            transform.position += transform.right * speed * Time.deltaTime;
+        }
+    }
+    
+    private void Move()
+    {
         // Input Manager
         // 입력 받기
         // 유니티 내부에 있는 Input Manager를 이용한 방법
+        
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+        
         // Horizonatal과 Vertical은 유니티 세팅에서 정한 것
         // GetAxis는 ( -1 ~ 1 ) 사이의 값을 뱉어낸다.
         // GetAxisRaw는 ( -1, 0, 1 ) 값을 뱉어낸다.
@@ -63,5 +88,25 @@ public class CharacterMovement : MonoBehaviour
         // transform.position : 월드 좌표 기준으로 이동하는 방법
         // 방향 * 속도 * 프레임 보정
         transform.position += dir * speed * Time.deltaTime;
+
+        if (h != 0 || v != 0)
+        {
+            Vector3 targetPos = transform.position + dir;
+            transform.LookAt(targetPos);
+        }
+    }
+
+    private void Jump()
+    {
+        // 스페이스바를 눌렀을 때
+        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        {
+            // 힘을 가한다 ( 방향 * 속도, 힘의 모드);
+            rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            // 자기 자신의 Rigidbody에 접근에 힘을 가한다. 위로 점프 파워 만큰 순간적 힘을 가함
+            // ForceMode : 지속적인 힘이냐, 순간적인 힘이냐, 질량을 사용하냐 무시하냐 차이
+            // Impulse를 대부분 사용한다.
+            
+        }
     }
 }
