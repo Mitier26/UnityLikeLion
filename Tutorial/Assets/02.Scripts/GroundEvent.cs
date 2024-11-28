@@ -9,7 +9,7 @@ public class GroundEvent : MonoBehaviour
     {
         if (other.collider.CompareTag("Player"))
         {
-            other.collider.GetComponent<CharacterMovement>().isGround = true;
+            other.collider.GetComponent<MyMove>().isGround = true;
         }
     }
 
@@ -17,7 +17,7 @@ public class GroundEvent : MonoBehaviour
     {
         if (other.collider.CompareTag("Player"))
         {
-            other.collider.GetComponent<CharacterMovement>().isGround = false;
+            other.collider.GetComponent<MyMove>().isGround = false;
         }
     }
 }

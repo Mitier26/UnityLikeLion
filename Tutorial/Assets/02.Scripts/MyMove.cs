@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,6 +46,25 @@ public class MyMove : MonoBehaviour
         {
             Vector3 targetPos = transform.position + dir;
             transform.LookAt(targetPos);
+            
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (rigidbody.velocity.y > 0.05f)
+        {
+            animator.SetBool("isUp", true);
+        }
+        else if (rigidbody.velocity.y < -0.05f)
+        {
+            animator.SetBool("isDown", true);
+        }
+        else if (isGround)
+        {
+            animator.SetBool("isUp", false);
+            animator.SetBool("isDown", false);
+            
         }
     }
 
@@ -53,7 +73,9 @@ public class MyMove : MonoBehaviour
         // 스페이스바를 눌렀을 때
         if (Input.GetKeyDown(KeyCode.Space) && isGround)
         {
+            
             rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            animator.SetTrigger("Jump");
         }
     }
 }
