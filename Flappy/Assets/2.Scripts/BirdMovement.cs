@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BirdMovement : MonoBehaviour
 {
+    public SoundManager soundManager;
     private Rigidbody2D myRigid;
     public float flyPower = 10f;
     private float angle;
@@ -19,6 +20,7 @@ public class BirdMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            soundManager.OnJumpSound();
             // myRigid.velocity = Vector2.up * 5f;
             myRigid.AddForce(Vector2.up * flyPower, ForceMode2D.Impulse);
 

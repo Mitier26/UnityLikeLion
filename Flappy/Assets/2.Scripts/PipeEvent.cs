@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class PipeEvent : MonoBehaviour
 {
+    public SoundManager soundManager;
     public GameObject endUI;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             endUI.SetActive(true);
-            Debug.Log("Game Over");
+            soundManager.OnCollisionSound();
         }
     }
 }
