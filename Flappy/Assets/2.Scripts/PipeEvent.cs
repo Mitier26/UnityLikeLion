@@ -11,8 +11,12 @@ public class PipeEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            other.GetComponent<BirdMovement>().OnParticle();
+            other.GetComponent<BirdMovement>().isDead = true;
+            other.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             endUI.SetActive(true);
             soundManager.OnCollisionSound();
+            
         }
     }
 }

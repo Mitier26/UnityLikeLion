@@ -822,11 +822,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: Flappy
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 80cd3f174461dc01
   metroApplicationDescription: Flappy
   wsaImages: {}
   metroTileShortName: 

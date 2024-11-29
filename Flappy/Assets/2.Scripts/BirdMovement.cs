@@ -11,6 +11,8 @@ public class BirdMovement : MonoBehaviour
     private float angle;
     public float rotationSpeed = 5f;
     public float limitPower = 5f;
+    public ParticleSystem deathParticles;
+    public bool isDead = false;
     private void Start()
     {
         myRigid = GetComponent<Rigidbody2D>();
@@ -39,5 +41,10 @@ public class BirdMovement : MonoBehaviour
         
         // 위에서 구한 각도를 실제로 대입한다.
         transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    public void OnParticle()
+    {
+        deathParticles.Play();
     }
 }

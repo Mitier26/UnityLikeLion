@@ -12,6 +12,8 @@ public class RandomPipeMap : MonoBehaviour
     public GameObject[] pipes;
     public float pipeSpeed = 5f;
 
+    public GameObject player;
+
     private void Start()
     {
         RandomPipeType();
@@ -29,7 +31,11 @@ public class RandomPipeMap : MonoBehaviour
         // 반복문을 이용해 코드를 간결하게 만들었다.
         foreach (GameObject pipe in pipes)
         {
-            pipe.transform.position -= Vector3.right * pipeSpeed * Time.deltaTime;
+            if (!player.GetComponent<BirdMovement>().isDead)
+            {
+                pipe.transform.position -= Vector3.right * pipeSpeed * Time.deltaTime;
+            }
+            
 
             if (pipe.transform.position.x < -10f)
             {
