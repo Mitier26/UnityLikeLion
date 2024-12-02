@@ -6,5 +6,12 @@ public class Skill
 {
     public string Name;
     public int Power;
-    public TargetType target;
+    public TargetType Target;
+
+    public Skill(string name, int power, TargetType target)
+    {
+        Name = name;
+        Power = power;
+        Target = target;
+    }
 }
