@@ -86,11 +86,6 @@ public class Battle : MonoBehaviour
             AddToBattleLog(actionLog);
             Debug.Log(actionLog);
         }
-        
-
-        
-        
-        
     }
 
     Character SelectTarget(TargetType targetType, bool isPlayerAction)
