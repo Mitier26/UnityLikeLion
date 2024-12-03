@@ -185,6 +185,26 @@ using UnityEngine;
                 newNode.Next = current;
             }
 
+            public void DeleteData(T data)
+            {
+                // 같은 데이터를 찾아야한다.
+
+                NodeDouble<T> current = Head;
+                
+                Debug.Log("afasdf"+current.Data);    // 111
+                
+                while (current.Next != null)
+                {
+                    if (current.Data.Equals(data))
+                    {
+                        Debug.Log(current.Data);
+                        Debug.Log(current.Next);
+                        Debug.Log(current.Next.Data);
+                        Debug.Log(current.Prev);
+                    }
+                    current = current.Next;
+                }
+            }
             
             public void Traverse()
             {
@@ -296,7 +316,8 @@ public class ListExample : MonoBehaviour
         list.AddLast(333);
         list.AddLast(444);
         list.Insert(2, 666);
-        list.Traverse();
+        list.DeleteData(333);
+        // list.Traverse();
         
     }
 }
