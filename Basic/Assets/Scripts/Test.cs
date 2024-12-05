@@ -5,20 +5,23 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
+    private int[] array = new[] { -1,2 };
     private List<int> list = new List<int>();
+    private int max = int.MinValue;
     private void Start()
     {
-        for (int i = 1; i <= 29; i++)
+        
+        for (int i = 0; i < array.Length; i++)
         {
-            if (29 % i == 0)
+            for (int j = i+1; j < array.Length; j++)
             {
-                list.Add(i);
+                if ((array[i] * array[j]) > max)
+                {
+                    max = array[i] * array[j];
+                }
             }
         }
-
-        for (int i = 0; i < list.Count; i++)
-        {
-            // Debug.Log(list[i]);
-        }
+        
+        Debug.Log(max);
     }
 }
