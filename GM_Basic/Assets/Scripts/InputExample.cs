@@ -51,6 +51,12 @@ public class InputExample : MonoBehaviour
         {
             Debug.Log("Input Manager를 이용한 입력!!");
         }
+
+        if (Input.GetButton("Horizontal"))
+        {
+            Debug.Log("횡 이동 중...." + Input.GetAxis(("Horizontal")));
+            // GetAxis : 가중치가 있다. 한번에 1이 되는 거이 아니야!
+        }
         
     }
 }
