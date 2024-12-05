@@ -17,5 +17,6 @@ public class RaceButton : MonoBehaviour
     {
         rect = GetComponent<RectTransform>();
         clickButton = GetComponent<Button>();
+        text = GetComponentInChildren<TextMeshProUGUI>();
     }
 }
