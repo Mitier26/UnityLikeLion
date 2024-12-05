@@ -18,7 +18,7 @@ public class Test : MonoBehaviour
 
         for (int i = 0; i < list.Count; i++)
         {
-            Debug.Log(list[i]);
+            // Debug.Log(list[i]);
         }
     }
 }
