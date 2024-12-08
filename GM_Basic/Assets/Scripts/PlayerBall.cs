@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBall : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerBall : MonoBehaviour
     private Rigidbody rb;
     public int itemCount;
     private AudioSource audio;
+    public GameManager gameManager;
     
     private void Awake()
     {
@@ -48,7 +50,23 @@ public class PlayerBall : MonoBehaviour
         {
             itemCount++;
             audio.Play();
+            gameManager.GetItem(itemCount);
             other.gameObject.SetActive(false);
+        }
+        else if (other.CompareTag("Finish"))
+        {
+            if (gameManager.totalItemCount == itemCount)
+            {
+                if (gameManager.stage == 1)
+                {
+                    SceneManager.LoadScene(0);    
+                }
+                SceneManager.LoadScene(gameManager.stage + 1);
+            }
+            else
+            {
+                SceneManager.LoadScene(gameManager.stage);
+            }
         }
     }
 }
