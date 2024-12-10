@@ -1,97 +1,135 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
+// 노드의 색상을 정의하는 열거형
+public enum NodeColor
+{
+    Red,
+    Black
+}
 
 public class RedBlackTree : MonoBehaviour
 {
-    // 노드의 색상을 정의하는 열거형
-    private enum NodeColor
+    public RBNode nilNode;
+    public RBNode root;
+    public RBNode RBNodePrefab;
+
+    public bool bNext = false;
+    
+    void Start()
     {
-        Red,
-        Black
+        root = nilNode;
     }
 
-    // 노드 클래스 정의
-    private class Node
+    void Update()
     {
-        public int data;
-        public Node left, right, parent;
-        public NodeColor color;
-
-        // 새로운 노드는 항상 Red로 생성 (조건 1 관련)
-        public Node(int data)
+        bNext = false;
+        
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            this.data = data;
-            left = right = parent = null;
-            color = NodeColor.Red;
+            bNext = true;
+        }
+        
+        if (Input.GetKey(KeyCode.P))
+        {
+            bNext = true;
         }
     }
 
-    private Node root;
-    private Node TNULL; // NIL 노드 (조건 3 관련)
-
-    void Start()
+// 삽입 시 트리 재조정을 위한 좌회전
+    private IEnumerator LeftRotate(RBNode x)
     {
-        // NIL 노드는 항상 Black (조건 3)
-        TNULL = new Node(0);
-        TNULL.color = NodeColor.Black;
-        root = TNULL;
-    }
-
-    // 삽입 시 트리 재조정을 위한 좌회전
-    private void LeftRotate(Node x)
-    {
-        Node y = x.right;
+        RBNode y = x.right;
+        yield return new WaitUntil(() => bNext);
         x.right = y.left;
-        
-        if (y.left != TNULL)
+        yield return new WaitUntil(() => bNext);
+        if (y.left != nilNode)
+        {
             y.left.parent = x;
+            yield return new WaitUntil(() => bNext);
+        }
             
         y.parent = x.parent;
-        
-        if (x.parent == null)
-            root = y;
+        yield return new WaitUntil(() => bNext);
+
+        if (x.parent == nilNode)
+        {
+            root = y;   
+            yield return new WaitUntil(() => bNext);
+        }
         else if (x == x.parent.left)
+        {
             x.parent.left = y;
+            yield return new WaitUntil(() => bNext);
+        }
         else
+        {
             x.parent.right = y;
+            yield return new WaitUntil(() => bNext);
+        }
             
         y.left = x;
+        yield return new WaitUntil(() => bNext);
         x.parent = y;
+        yield return new WaitUntil(() => bNext);
     }
 
     // 삽입 시 트리 재조정을 위한 우회전
-    private void RightRotate(Node x)
+    private IEnumerator RightRotate(RBNode x)
     {
-        Node y = x.left;
+        RBNode y = x.left;
+        yield return new WaitUntil(() => bNext);
         x.left = y.right;
-        
-        if (y.right != TNULL)
+        yield return new WaitUntil(() => bNext);
+
+        if (y.right != nilNode)
+        {
             y.right.parent = x;
+            yield return new WaitUntil(() => bNext);
+        }
             
         y.parent = x.parent;
-        
-        if (x.parent == null)
+        yield return new WaitUntil(() => bNext);
+
+        if (x.parent == nilNode)
+        {
             root = y;
+            yield return new WaitUntil(() => bNext);
+        }
         else if (x == x.parent.right)
+        {
             x.parent.right = y;
+            yield return new WaitUntil(() => bNext);
+        }
         else
+        {
             x.parent.left = y;
+            yield return new WaitUntil(() => bNext);
+        }
             
         y.right = x;
+        yield return new WaitUntil(() => bNext);
         x.parent = y;
+        yield return new WaitUntil(() => bNext);
     }
 
     // 노드 삽입
     public void Insert(int key)
     {
-        Node node = new Node(key);
-        node.left = TNULL;
-        node.right = TNULL;
-
-        Node y = null;
-        Node x = root;
+        RBNode node = Instantiate(RBNodePrefab.gameObject, transform).GetComponent<RBNode>();
+        node.left = nilNode;
+        node.right = nilNode;
+        node.nilNode = nilNode;
+        node.parent = nilNode;
+        
+        node.data = key;
+        
+        RBNode y = nilNode;
+        RBNode x = root;
 
         // 삽입 위치 찾기
-        while (x != TNULL)
+        while (x != nilNode)
         {
             y = x;
             if (node.data < x.data)
@@ -102,22 +140,22 @@ public class RedBlackTree : MonoBehaviour
 
         node.parent = y;
         
-        if (y == null)
+        if (y == nilNode)
             root = node;  // 조건 2: 루트는 항상 Black이 되도록 InsertFixup에서 처리
         else if (node.data < y.data)
             y.left = node;
         else
             y.right = node;
 
-        InsertFixup(node); // 레드-블랙 트리 속성 복구
+        StartCoroutine(InsertFixup(node)); // 레드-블랙 트리 속성 복구
     }
 
     // 삽입 후 레드-블랙 트리 속성 복구
-    private void InsertFixup(Node k)
+    private IEnumerator InsertFixup(RBNode k)
     {
-        Node u;
+        RBNode u = nilNode;
         // 조건 4: Red 노드의 자식은 Black이어야 함
-        while (k.parent != null && k.parent.color == NodeColor.Red)
+        while (k.parent != nilNode && k.parent.color == NodeColor.Red)
         {
             if (k.parent == k.parent.parent.right)
             {
@@ -127,8 +165,11 @@ public class RedBlackTree : MonoBehaviour
                 {
                     // 색상 변경으로 해결
                     u.color = NodeColor.Black;
+                    yield return new WaitUntil(() => bNext);
                     k.parent.color = NodeColor.Black;
+                    yield return new WaitUntil(() => bNext);
                     k.parent.parent.color = NodeColor.Red;
+                    yield return new WaitUntil(() => bNext);
                     k = k.parent.parent;
                 }
                 else
@@ -137,12 +178,15 @@ public class RedBlackTree : MonoBehaviour
                     if (k == k.parent.left)
                     {
                         k = k.parent;
-                        RightRotate(k);
+                        yield return new WaitUntil(() => bNext);
+                        yield return RightRotate(k);
                     }
                     // 색상 변경 및 회전으로 해결
                     k.parent.color = NodeColor.Black;
+                    yield return new WaitUntil(() => bNext);
                     k.parent.parent.color = NodeColor.Red;
-                    LeftRotate(k.parent.parent);
+                    yield return new WaitUntil(() => bNext);
+                    yield return LeftRotate(k.parent.parent);
                 }
             }
             else
@@ -152,26 +196,35 @@ public class RedBlackTree : MonoBehaviour
                 if (u.color == NodeColor.Red)
                 {
                     u.color = NodeColor.Black;
+                    yield return new WaitUntil(() => bNext);
                     k.parent.color = NodeColor.Black;
+                    yield return new WaitUntil(() => bNext);
                     k.parent.parent.color = NodeColor.Red;
+                    yield return new WaitUntil(() => bNext);
                     k = k.parent.parent;
+                    yield return new WaitUntil(() => bNext);
                 }
                 else
                 {
                     if (k == k.parent.right)
                     {
                         k = k.parent;
-                        LeftRotate(k);
+                        yield return LeftRotate(k);
                     }
                     k.parent.color = NodeColor.Black;
+                    yield return new WaitUntil(() => bNext);
                     k.parent.parent.color = NodeColor.Red;
-                    RightRotate(k.parent.parent);
+                    yield return new WaitUntil(() => bNext);
+                    yield return RightRotate(k.parent.parent);
                 }
             }
             if (k == root)
                 break;
         }
+        yield return new WaitUntil(() => bNext);
         // 조건 2: 루트는 항상 Black
         root.color = NodeColor.Black;
+        
+        Debug.Log("Insert Finish");
     }
 }
