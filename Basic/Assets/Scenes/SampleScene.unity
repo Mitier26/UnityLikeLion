@@ -877,7 +877,7 @@ GameObject:
   - component: {fileID: 970400126}
   - component: {fileID: 970400125}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: StackObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1560,7 +1560,7 @@ GameObject:
   - component: {fileID: 1805134339}
   - component: {fileID: 1805134338}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: UndoRedo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
