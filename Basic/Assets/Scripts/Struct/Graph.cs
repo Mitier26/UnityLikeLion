@@ -34,7 +34,7 @@ public class Graph : MonoBehaviour
             Vertex formV = vertices[from];
             Vertex toV = vertices[to];
 
-            if (formV.neighbors.ContainsKey(toV))
+            if (!formV.neighbors.ContainsKey(toV))
             {
                 formV.neighbors.Add(toV, weight);
                 Debug.Log($"간선 {from} -> {to} (가중치: {weight})가 추가되었습니다.");
@@ -91,6 +91,58 @@ public class Graph : MonoBehaviour
         }
     }
 
+    public void Dijkstra(string startName)
+    {
+        if (!vertices.ContainsKey(startName)) return;
+
+        Dictionary<Vertex, float> distances = new Dictionary<Vertex, float>();
+        Dictionary<Vertex, Vertex> previous = new Dictionary<Vertex, Vertex>();
+        HashSet<Vertex> unvisited = new HashSet<Vertex>();
+
+        foreach (Vertex vertex in vertices.Values)
+        {
+            distances[vertex] = float.MaxValue;
+            previous[vertex] = null;
+            unvisited.Add(vertex);
+        }
+
+        Vertex start = vertices[startName];
+        distances[start] = 0;
+
+        while (unvisited.Count > 0)
+        {
+            Vertex current = null;
+            float minDistance = float.MaxValue;
+            foreach (Vertex vertex in unvisited)
+            {
+                if (distances[vertex] < minDistance)
+                {
+                    current = vertex;
+                    minDistance = distances[vertex];
+                }
+            }
+
+            if (current == null) break;
+
+            unvisited.Remove(current);
+
+            foreach (var neighbor in current.neighbors)
+            {
+                float alt = distances[current] = neighbor.Value;
+                if (alt < distances[neighbor.Key])
+                {
+                    distances[neighbor.Key] = alt;
+                    previous[neighbor.Key] = current;
+                }
+            }
+        }
+        
+        foreach (var vertex in vertices.Values)
+        {
+            Debug.Log($"{startName}에서 {vertex.name}까지의 최단 거리: {distances[vertex]}");
+        }
+    }
+
     private void Start()
     {
         AddVertex("1");
@@ -116,5 +168,7 @@ public class Graph : MonoBehaviour
         BFS("1");
         Debug.Log("DFS");
         DFS("1");
+        Debug.Log("다익");
+        Dijkstra("1");
     }
 }
