@@ -145,29 +145,37 @@ public class Graph : MonoBehaviour
 
     private void Start()
     {
-        AddVertex("1");
-        AddVertex("2");
-        AddVertex("3");
-        AddVertex("4");
-        AddVertex("5");
-        AddVertex("6");
-        AddVertex("7");
-        AddVertex("8");
-        AddVertex("9");
+        AddVertex("집");
+        AddVertex("슈퍼마켓");
+        AddVertex("미용실");
+        AddVertex("레스토랑");
+        AddVertex("은행");
+        AddVertex("영어학원");
+        AddVertex("학교");
         
-        AddEdge("1", "2", 4);
-        AddEdge("2", "3", 2);
-        AddEdge("3", "4", 1);
-        AddEdge("4", "5", 5);
+        AddEdge("집", "미용실", 5f);
+        AddEdge("집", "슈퍼마켓", 10f);
+        AddEdge("집", "영어학원", 9f);
         
-        AddEdge("1", "8", 5);
-        AddEdge("8", "7", 5);
-        AddEdge("8", "9", 5);
+        AddEdge("미용실", "슈퍼마켓", 3f);
+        AddEdge("미용실", "은행", 11f);
+        
+        AddEdge("슈퍼마켓", "레스토랑", 3f);
+        AddEdge("슈퍼마켓", "은행", 7f);
+        AddEdge("슈퍼마켓", "영어학원", 10f);
+        
+        AddEdge("레스토랑", "은행", 4f);
+        
+        AddEdge("영어학원", "은행", 7f);
+        AddEdge("영어학원", "학교", 12f);
+        
+        AddEdge("은행", "학교", 2f);
+        
         
         Debug.Log("BFS");
-        BFS("1");
+        BFS("집");
         Debug.Log("DFS");
-        DFS("1");
+        DFS("집");
         Debug.Log("다익");
         Dijkstra("1");
     }
