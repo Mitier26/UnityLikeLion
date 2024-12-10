@@ -1,25 +1,40 @@
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    private int num = 100;
-    int count = 0;
-    private string str = "hello";
-
-    private int iNum1, iNum2;
+    public string my_string = "hi12392";
     private void Start()
     {
-        iNum1 = 1;
-        iNum2 = 2;
-        char[] chars = str.ToCharArray();
-
-        char temp = chars[iNum1];
-        chars[iNum1] = chars[iNum2];
-        chars[iNum2] = temp;
+        char[] charArray = my_string.ToCharArray();
+        List<int> intList = new List<int>();
         
-        str = new string(chars);
-        Debug.Log(count);
-        Debug.Log(str);
+        for (int i = 0; i < charArray.Length; i++)
+        {
+            Debug.Log((int)(charArray[i]));
+            // int로 변경했을 때 48 = 0; 57 = 9
+            // 그냥 해도 가능
+            if ((charArray[i]) >= '0' && charArray[i]<= '9')
+            {
+                intList.Add(charArray[i] - '0');
+                // 문자를 숫자로 바꾸는 방법
+            }
+        }
+
+        intList.Sort();
+        
+        int[] answer = intList.ToArray();
+
+        for (int i = 0; i < answer.Length; i++)
+        {
+            Debug.Log(answer[i]);
+        }
+        
+        // for 문을 이용해 만들었다.
+        // 분명 더 쉬운 방법이 있을 것이다.
+        // 리스트에서 숫자만 찾는 방법
+
     }
 }
