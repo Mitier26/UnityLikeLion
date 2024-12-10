@@ -23,6 +23,7 @@ public class Graph : MonoBehaviour
         if (!vertices.ContainsKey(name))
         {
             vertices.Add(name, new Vertex(name));
+            Debug.Log($"정점 {name}이(가) 추가되었습니다.");
         }
     }
 
@@ -36,6 +37,7 @@ public class Graph : MonoBehaviour
             if (formV.neighbors.ContainsKey(toV))
             {
                 formV.neighbors.Add(toV, weight);
+                Debug.Log($"간선 {from} -> {to} (가중치: {weight})가 추가되었습니다.");
             }
         }
     }
@@ -54,6 +56,7 @@ public class Graph : MonoBehaviour
         while (queue.Count > 0)
         {
             Vertex currentVertex = queue.Dequeue();
+            Debug.Log($"방문: {currentVertex.name}");
 
             foreach (Vertex neighbor in currentVertex.neighbors.Keys)
             {
@@ -77,6 +80,7 @@ public class Graph : MonoBehaviour
     public void DFSUtil(Vertex vertex, HashSet<Vertex> visited)
     {
         visited.Add(vertex);
+        Debug.Log($"방문: {vertex.name}");
 
         foreach (Vertex neighbor in vertex.neighbors.Keys)
         {
