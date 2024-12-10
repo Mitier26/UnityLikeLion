@@ -8,6 +8,6 @@ namespace UnityCS
 {
     internal class _02NameSpace
     {
-
+        
     }
 }

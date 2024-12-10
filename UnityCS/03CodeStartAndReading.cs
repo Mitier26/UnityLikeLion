@@ -17,6 +17,7 @@ namespace UnityCS
         {
             // 코드를 한 줄 씩 읽는 것을 IDE가 도와 준다.
             // F10
+            Console.WriteLine("안녕");
         }
     }
 }

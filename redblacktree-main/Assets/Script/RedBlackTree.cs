@@ -5,6 +5,7 @@ using UnityEngine;
 // 노드의 색상을 정의하는 열거형
 public enum NodeColor
 {
+    // 노드의 색을 정의 하는 것
     Red,
     Black
 }
