@@ -12,6 +12,8 @@ public class PlayerAction : MonoBehaviour
     
     Rigidbody2D rigid;
     private Animator anim;
+    private Vector3 direction;
+    public GameObject scanObject;
 
     private void Awake()
     {
@@ -47,11 +49,37 @@ public class PlayerAction : MonoBehaviour
         {
             anim.SetBool("isChange", false);
         }
+
+        if (vDown && v == 1)
+            direction = Vector3.up;
+        else if (vDown && v == -1)
+            direction = Vector3.down;
+        else if (hDown && h == -1)
+            direction = Vector3.left;
+        else if (hDown && h == 1)
+            direction = Vector3.right;
+
+        if (Input.GetButtonDown("Jump") && scanObject != null)
+        {
+            Debug.Log(scanObject.name);
+        }
     }
 
     private void FixedUpdate()
     {
         Vector2 moveVew = isHorizonMove ? new Vector2(h, 0) : new Vector2(0, v);
         rigid.velocity = moveVew * speed;
+        
+        Debug.DrawRay(rigid.position, direction * 0.7f, new Color(0, 1,0));
+        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, direction , 0.7f, LayerMask.GetMask("Object"));
+        
+        if (rayHit.collider != null)
+        {
+            scanObject = rayHit.collider.gameObject;
+        }
+        else
+        {
+            scanObject = null;
+        }
     }
 }
