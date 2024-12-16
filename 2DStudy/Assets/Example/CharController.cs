@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class CharController : MonoBehaviour
 {
+    public static readonly int Speed = Animator.StringToHash("Speed");
     InputAction Move_Input;
     InputAction Jump_Input;
     Animator animator;
@@ -44,8 +45,8 @@ public class CharController : MonoBehaviour
         
         if(moveValue.x != 0)
             spriteRenderer.flipX = moveValue.x < 0;
-        
-        animator.SetFloat("Speed", Math.Abs(moveValue.x) );
+
+        animator.SetFloat(Speed, Math.Abs(moveValue.x) );
         
         rigidbody.position += new Vector2(moveValue.x * speed * Time.deltaTime, 0);
 
