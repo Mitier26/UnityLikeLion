@@ -6,13 +6,16 @@ using UnityEngine.InputSystem;
 public class CharController : MonoBehaviour
 {
     InputAction Move_Input;
+    InputAction Jump_Input;
     Animator animator;
     Rigidbody2D rigidbody;
     SpriteRenderer spriteRenderer;
 
+    public bool isGrounded = true;
+
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float jumpForce = 1f;
     [SerializeField] private float cameraSpeed;
     [SerializeField] private float cameraSlowSpeed = 8f;
     [SerializeField] private float cameraFastSpeed = 15f;
@@ -28,6 +31,7 @@ public class CharController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         UnityEngine.InputSystem.PlayerInput Input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         Move_Input = Input.actions["Move"];
+        Jump_Input = Input.actions["Jump"];
         
         cameraOffset = mainCamera.transform.position - transform.position;
 
@@ -45,10 +49,32 @@ public class CharController : MonoBehaviour
         
         rigidbody.position += new Vector2(moveValue.x * speed * Time.deltaTime, 0);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Jump_Input.IsPressed())
         {
-            rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.7f, LayerMask.GetMask("Ground"));
+
+            if (hit.distance <= 0)
+            {
+                animator.SetBool("Ground", true);
+                rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            }
+        }  
+    }
+
+    IEnumerator JumpEndChekc()
+    {
+        while (true)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.7f, LayerMask.GetMask("Ground"));
+
+            if (hit.distance <= 0)
+            {
+                animator.SetBool("Ground", false);
+                break;
+            }
+            yield return null;
         }
+        isGrounded = true;
     }
 
     private void FixedUpdate()
@@ -65,5 +91,19 @@ public class CharController : MonoBehaviour
         );
         mainCamera.transform.position = newPosition;
 
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.GetContact(0).normal == Vector2.up)
+        {
+            animator.SetBool("Ground", false);
+            animator.Play("Alchemist_Idle");
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        animator.SetBool("Ground", true);
     }
 }
