@@ -1,110 +1,83 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class CharController : MonoBehaviour
 {
-    public static readonly int Speed = Animator.StringToHash("Speed");
+    private const float jumpTestValue = 0.3f;
+    private static readonly int Speed1 = Animator.StringToHash("Speed");
+    private static readonly int Ground = Animator.StringToHash("Ground");
+    [SerializeField] private float Speed = 5.0f;
+    [SerializeField] private float JumpSpeed = 15.0f;
+    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private float CameraSpeed = 4.0f;
+    [SerializeField] private float MaxDistence = 4.0f;
+    
+    private Vector3 cameraOffset;
+    
     InputAction Move_Input;
-    InputAction Jump_Input;
-    Animator animator;
-    Rigidbody2D rigidbody;
-    SpriteRenderer spriteRenderer;
+    private Animator _animator;
+    private Rigidbody2D _rigidbody;
+    private SpriteRenderer _spriteRenderer;
+    private InputAction Jump_Input;
 
-    public bool isGrounded = true;
+    public bool Grounded = true;
 
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float jumpForce = 1f;
-    [SerializeField] private float cameraSpeed;
-    [SerializeField] private float cameraSlowSpeed = 8f;
-    [SerializeField] private float cameraFastSpeed = 15f;
-    [SerializeField] private float maxDistance = 4f;
-    
-    Vector3 cameraOffset;
-    
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
-        rigidbody = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        
         UnityEngine.InputSystem.PlayerInput Input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         Move_Input = Input.actions["Move"];
         Jump_Input = Input.actions["Jump"];
-        
-        cameraOffset = mainCamera.transform.position - transform.position;
 
+        cameraOffset = _mainCamera.transform.position - transform.position;
     }
 
+    
     // Update is called once per frame
     void Update()
     {
         Vector2 moveValue = Move_Input.ReadValue<Vector2>();
         
-        if(moveValue.x != 0)
-            spriteRenderer.flipX = moveValue.x < 0;
-
-        animator.SetFloat(Speed, Math.Abs(moveValue.x) );
+        if (moveValue.x != 0)
+            _spriteRenderer.flipX = moveValue.x < 0;
         
-        rigidbody.position += new Vector2(moveValue.x * speed * Time.deltaTime, 0);
-
-        if (Jump_Input.IsPressed())
+        _animator.SetFloat(Speed1, Mathf.Abs(moveValue.x));
+        _rigidbody.velocity = new Vector2(moveValue.x * Speed, _rigidbody.velocity.y);
+        
+        if (Jump_Input.triggered && Grounded)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.7f, LayerMask.GetMask("Ground"));
-
-            if (hit.distance <= 0)
-            {
-                animator.SetBool("Ground", true);
-                rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            }
-        }  
-    }
-
-    IEnumerator JumpEndChekc()
-    {
-        while (true)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.7f, LayerMask.GetMask("Ground"));
-
-            if (hit.distance <= 0)
-            {
-                animator.SetBool("Ground", false);
-                break;
-            }
-            yield return null;
-        }
-        isGrounded = true;
-    }
-
-    private void FixedUpdate()
-    {
-        var charactorPosition = transform.position + cameraOffset;
-        float distance = Vector3.Distance(mainCamera.transform.position, charactorPosition);
-
-        cameraSpeed = distance > maxDistance ? cameraFastSpeed : cameraSlowSpeed;
-            
-        Vector3 newPosition = Vector3.Lerp(
-            mainCamera.transform.position, 
-            charactorPosition, 
-            cameraSpeed * Time.deltaTime
-        );
-        mainCamera.transform.position = newPosition;
-
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.GetContact(0).normal == Vector2.up)
-        {
-            animator.SetBool("Ground", false);
-            animator.Play("Alchemist_Idle");
+            _rigidbody.AddForce(Vector2.up * JumpSpeed, ForceMode2D.Impulse);
+            _animator.Play("Alchemist_Jump");
         }
     }
-
-    private void OnCollisionExit2D(Collision2D other)
+    
+    private void LateUpdate()
     {
-        animator.SetBool("Ground", true);
+        var CharPosition = transform.position + cameraOffset;
+        float speed = CameraSpeed;
+
+        Vector3 newPosition = Vector3.zero;
+        
+        if (Vector3.Distance(CharPosition, _mainCamera.transform.position) >= MaxDistence)
+        {
+            Vector3 Gap = ((_mainCamera.transform.position) - CharPosition).normalized * MaxDistence;
+            newPosition = CharPosition + Gap;
+        }
+        else
+        {
+            newPosition = Vector3.MoveTowards(_mainCamera.transform.position, 
+                CharPosition, 
+                speed * Time.deltaTime);
+        }
+
+        _mainCamera.transform.position = newPosition;
     }
 }

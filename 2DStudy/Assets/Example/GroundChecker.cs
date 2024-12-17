@@ -15,13 +15,13 @@ public class GroundChecker : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("OnTriggerEnter2D");
-        charController.isGrounded = true;
+        charController.Grounded = true;
         charController.GetComponent<Animator>().Play("Idles");
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         Debug.Log("OnTriggerExit2D");
-        charController.isGrounded= false;
+        charController.Grounded= false;
     }
 }
