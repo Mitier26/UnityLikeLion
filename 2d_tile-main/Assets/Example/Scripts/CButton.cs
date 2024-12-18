@@ -7,16 +7,17 @@ using UnityEngine.UI;
 public class CButton : MonoBehaviour
 {
     [SerializeField] private Button button;
-
+    
+    public int Index { get; set; }
 
     private void Awake()
     {
         button = GetComponent<Button>();
     }
 
-    public void AddListener(UnityAction listener)
+    public void AddListener(UnityAction<int> listener)
     {
-        button.onClick.AddListener(listener);
+        button.onClick.AddListener(()=>listener(Index));
     }
 
     public void RemoveListener(UnityAction listener) 

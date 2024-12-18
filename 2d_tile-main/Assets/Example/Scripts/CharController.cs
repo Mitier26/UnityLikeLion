@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public struct DamageFieldData
 {
     public float distance;
+    // 구조체, 지금은 공격의 범위만 가지고 있다.
 }
 
 public class CharController : MonoBehaviour
@@ -29,10 +30,10 @@ public class CharController : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private InputAction Jump_Input;
 
-    public List<CButton> _buttons;
+    public List<CButton> _buttons;                      // 화면에 표시되는 버튼들
     
-    public List<DamageField> _damageFields;
-    public List<DamageFieldData> _damageFieldDatas;
+    public List<DamageField> _damageFields;             // 생성되는 게임 오브젝트의 스크립트
+    public List<DamageFieldData> _damageFieldDatas;     // 공격의 거리, 위에 있는 구조체
 
     [NonSerialized] public int Grounded = 0;
     
@@ -48,20 +49,28 @@ public class CharController : MonoBehaviour
         Jump_Input = Input.actions["Jump"];
 
         cameraOffset = _mainCamera.transform.position - transform.position;
-
-        foreach(var cButton in _buttons)
+        
+        // 버튼을 초기화하는 것, 버튼 리스트를 돌아 스킬을 대입했다.
+        // 스킬이 여러개 이면 어떻게 할 것인가?
+        // 이렇게 하면 모든 버튼이 같은 스킬을 가지게 될 것이다.
+        for (int i = 0; i < _buttons.Count; i++)
         {
-            cButton.AddListener(FireSkill);
+            _buttons[i].Index = i;
+            _buttons[i].AddListener(FireSkill);
         }
+        
+        
     }
 
     bool canMove = true;
+    private int currentButton = -1;
 
-    void FireDamageField(int index)
+    void FireDamageField()
     {
-        GameObject go = Instantiate(_damageFields[index].gameObject);
+        Debug.Log(currentButton);
+        GameObject go = Instantiate(_damageFields[currentButton].gameObject);
         go.GetComponent<DamageField>().MyOwnerTag = gameObject.tag;
-        go.transform.position = transform.position + transform.right * _damageFieldDatas[index].distance;
+        go.transform.position = transform.position + transform.right * _damageFieldDatas[currentButton].distance;
         Destroy(go, 3.0f);
     }
 
@@ -70,11 +79,13 @@ public class CharController : MonoBehaviour
         canMove = bMove == 1;
     }
 
-    void FireSkill()
+    void FireSkill(int skillIndex)
     {
-        //StartCoroutine(FireSkillCoroutine());
+        // StartCoroutine(FireSkillCoroutine());
         _animator.Rebind();
         _animator.Play("Attack");
+        currentButton = skillIndex;
+        
     }
 
 
