@@ -6,7 +6,7 @@ public class HitMonsterCollision : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        hitCollision hi = other.GetComponent<hitCollision>();
+        HitCollision hi = other.GetComponent<HitCollision>();
 
         Vector3 backPosition = hi.transform.position - transform.position;
         backPosition.Normalize();

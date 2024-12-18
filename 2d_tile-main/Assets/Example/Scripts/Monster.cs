@@ -38,7 +38,7 @@ public class Monster : MonoBehaviour
 
         if (other.gameObject.layer == playerlayerMask)
         {
-            Rigidbody2D rb = other.GetComponent<hitCollision>().parentRigidbody;
+            Rigidbody2D rb = other.GetComponent<HitCollision>().parentRigidbody;
 
             Vector3 backPosition = rb.transform.position - transform.position;
             backPosition.Normalize();

@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[Serializable]
+public struct DamageFieldData
+{
+    public float distance;
+}
+
 public class CharController : MonoBehaviour
 {
     private const float jumpTestValue = 0.3f;
@@ -23,8 +29,14 @@ public class CharController : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private InputAction Jump_Input;
 
-    [NonSerialized] public int Grounded = 0;
+    public List<CButton> _buttons;
+    
+    public List<DamageField> _damageFields;
+    public List<DamageFieldData> _damageFieldDatas;
 
+    [NonSerialized] public int Grounded = 0;
+    
+    
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -36,11 +48,56 @@ public class CharController : MonoBehaviour
         Jump_Input = Input.actions["Jump"];
 
         cameraOffset = _mainCamera.transform.position - transform.position;
+
+        foreach(var cButton in _buttons)
+        {
+            cButton.AddListener(FireSkill);
+        }
+    }
+
+    bool canMove = true;
+
+    void FireDamageField(int index)
+    {
+        GameObject go = Instantiate(_damageFields[index].gameObject);
+        go.GetComponent<DamageField>().MyOwnerTag = gameObject.tag;
+        go.transform.position = transform.position + transform.right * _damageFieldDatas[index].distance;
+        Destroy(go, 3.0f);
+    }
+
+    void CanMove(int bMove)
+    {
+        canMove = bMove == 1;
+    }
+
+    void FireSkill()
+    {
+        //StartCoroutine(FireSkillCoroutine());
+        _animator.Rebind();
+        _animator.Play("Attack");
+    }
+
+
+    IEnumerator FireSkillCoroutine()
+    {
+        _animator.Rebind();
+        _animator.Play("Attack");
+        yield return null;
+        var curState = _animator.GetCurrentAnimatorStateInfo(0);
+        while (1.0 > curState.normalizedTime)
+        {
+            yield return null;
+        }
     }
 
     void FixedUpdate()
     {
         Vector2 moveValue = Move_Input.ReadValue<Vector2>();
+
+        if (!canMove)
+        {
+            moveValue = Vector2.zero;
+        }
 
         if (moveValue.x != 0)
             _spriteRenderer.flipX = moveValue.x < 0;

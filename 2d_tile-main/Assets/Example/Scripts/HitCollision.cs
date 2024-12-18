@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class hitCollision : MonoBehaviour
+public class HitCollision : MonoBehaviour
 {
     [NonSerialized] public Rigidbody2D parentRigidbody;
     [SerializeField] private float decelerationRate = 5f;
