@@ -1,13 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Monster : MonoBehaviour
 {
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     private Rigidbody2D _rigidbody;
+    public Slider _slider;
 
+    public int maxHp = 5;
+    private int hp = 5;
+
+    public int Hp
+    {
+        get { return hp; }
+        set
+        {
+            hp = Mathf.Clamp(value, 0, maxHp);
+            
+            _slider.value = (float)hp / maxHp;
+            if (hp <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+    
     public float Speed = 5.0f;
     public int switchCount = 0;
     private int moveCount = 0;
@@ -23,13 +43,11 @@ public class Monster : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
+        
         playerlayerMask = LayerMask.NameToLayer("Player");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        _slider = GetComponentInChildren<Slider>();
+        _slider.maxValue = maxHp;
+        _slider.value = hp;
     }
 
     void OnTriggerEnter2D(Collider2D other)

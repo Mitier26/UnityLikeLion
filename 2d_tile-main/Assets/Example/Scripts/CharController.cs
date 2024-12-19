@@ -67,9 +67,9 @@ public class CharController : MonoBehaviour
 
     void FireDamageField()
     {
-        Debug.Log(currentButton);
         GameObject go = Instantiate(_damageFields[currentButton].gameObject);
         go.GetComponent<DamageField>().MyOwnerTag = gameObject.tag;
+        go.GetComponent<DamageField>().damage = currentButton+1;
         go.transform.position = transform.position + transform.right * _damageFieldDatas[currentButton].distance;
         Destroy(go, 3.0f);
     }
