@@ -34,7 +34,13 @@ public class CharController : MonoBehaviour
     
     public List<DamageField> _damageFields;             // 생성되는 게임 오브젝트의 스크립트
     public List<DamageFieldData> _damageFieldDatas;     // 공격의 거리, 위에 있는 구조체
+    
+    public Canvas _canvas;
+    public HpBar _hpBar;
+    public Camera ui_camera;
+    public Transform hpPosition;
 
+    
     [NonSerialized] public int Grounded = 0;
     
     
@@ -59,7 +65,9 @@ public class CharController : MonoBehaviour
             _buttons[i].AddListener(FireSkill);
         }
         
-        
+        GameObject go = Instantiate(_hpBar.gameObject, _canvas.transform);
+        go.GetComponent<HpBar>().UpdateOwner(hpPosition, ui_camera);
+
     }
 
     bool canMove = true;
