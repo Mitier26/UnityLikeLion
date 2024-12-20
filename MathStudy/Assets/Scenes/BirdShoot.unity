@@ -467,7 +467,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0.5, z: 0}
-  - {x: -2, y: 0.5, z: 1}
+  - {x: -2, y: 0.5, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -696,7 +696,7 @@ Transform:
   m_GameObject: {fileID: 1639366809}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.9, y: 0.53, z: 0}
+  m_LocalPosition: {x: -1.992, y: 0.491, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -714,8 +714,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951449c6b0872d248a828139ae795a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0, z: 0}
+  initialPosition: {x: 0, y: 0, z: 0}
+  initialLinePosition: {x: 0, y: 0, z: 0}
+  maxForce: 100
+  ballPrefab: {fileID: 8013912729751179289, guid: 296ec75dde7df2343866f94328d72c32, type: 3}
   lineRenderer: {fileID: 499621247}
-  maxPullDistance: 100
+  maxPullDistance: 5
 --- !u!135 &1639366812
 SphereCollider:
   m_ObjectHideFlags: 0
