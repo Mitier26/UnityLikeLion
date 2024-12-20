@@ -7,6 +7,12 @@ public class CustomCollider : MonoBehaviour
 {
     public Vector3 direction;
     public float speed;
+    public Rigidbody rigidbody;
+
+    private void Start()
+    {
+        rigidbody.velocity = direction;
+    }
 
     private void Update()
     {
@@ -14,6 +20,24 @@ public class CustomCollider : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
+    {
+        if (Physics.Raycast(transform.position, rigidbody.velocity, out RaycastHit hit,
+                1 << LayerMask.NameToLayer("Blockable")))
+        {
+            Vector3 hitVector = (hit.point - transform.position).normalized;
+            
+            Vector3 vector3 = rigidbody.velocity; 
+            vector3.y = -rigidbody.velocity.y;
+            rigidbody.velocity = hitVector * 2;
+
+            // rigidbody.velocity = -rigidbody.velocity + hit.normal * 2;
+            
+            // 이런거 쓰지 말고 OnCollisionEnter를 사용하자!!
+            // 직접 구현하는 것은 좋지만 더 좋은 것이 있다.
+        }
+    }
+
+    void custom(Collider other)
     {
         Vector3 point = other.ClosestPoint(transform.position);
         
