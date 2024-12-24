@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Red : Bird
+public class BirdSpawner : MonoBehaviour
 {
-    protected override void UseSkill()
-    {
-        
-    }
+    public Vector3[] spawnPoints;
+    
 }
