@@ -22,8 +22,11 @@ public class DraggableObject : MonoBehaviour,
     
     private Camera MainCamera;
  
-    [SerializeField] private LineRenderer lineRenderer;
+    public LineRenderer lineRenderer;
     [SerializeField] private float maxPullDistance;
+    
+    public Action OnFly;
+    public Action OnDestroyed;
 
     private void Awake()
     {
@@ -32,6 +35,13 @@ public class DraggableObject : MonoBehaviour,
         initialPosition = transform.position;   // 초기 위치를 저장
         initialLinePosition = lineRenderer.GetPosition(1);
     }
+
+    private void OnDestroy()
+    {
+        if (!OnDestroyed.IsUnityNull())
+            OnDestroyed?.Invoke();
+    }
+
 
     // 마우스를 클릭했을 때 작동
     public void OnPointerDown(PointerEventData eventData)
