@@ -25,6 +25,8 @@ public class Bird : MonoBehaviour
     public BirdState birdState = BirdState.Appearing;
     private bool isKillUsed;
     public Vector3 startPoint;
+    
+    public float maxDistance;
 
     public void InitBirdData(BirdData data)
     {
@@ -60,13 +62,19 @@ public class Bird : MonoBehaviour
         if (birdState == BirdState.Dragable)
         {
             // BirdGrab 의 범위이면 창작
+            // 뭔가 꼬인것 같은 느낌이다.
+            // 새에서 범위를 판단하는 것이 이상하다.
+            // BirdGrab을 찾고 준비되어 있는 새가 있는지 확인해야 했다.
+            // 범위에 들어 가는 것을 판단하는 것이 BirdGrab에 있기 때문
             BirdGrab birdGrab = FindObjectOfType<BirdGrab>();
             if (birdGrab != null && birdGrab.readyBird !=null)
             {
+                // 장착은 새총에
                 birdGrab.AttachBird();
             }
             else
             {
+                // 돌아가는 것은 새에
                 ReturnPosition(this);
             }
         }
