@@ -7,4 +7,13 @@ public class BirdData : ScriptableObject
     public float weight;
     public float speed;
     public Sprite birdSprite;
+    public SkillType skillType;
+}
+
+public enum SkillType
+{
+    Normal,
+    Explosive,
+    Boost,
+    Split,
 }
