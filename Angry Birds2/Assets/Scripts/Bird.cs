@@ -22,6 +22,8 @@ public class Bird : MonoBehaviour
     
     private Rigidbody2D rigidbody2D;
     private SpriteRenderer spriteRenderer;
+    private Collider2D[] colliders;
+    
     public BirdState birdState = BirdState.Appearing;
     private bool isKillUsed;
     public Vector3 startPoint;
@@ -32,9 +34,38 @@ public class Bird : MonoBehaviour
     {
         this.data = data;
         gameObject.name = data.birdName;
-        GetComponent<Rigidbody2D>().isKinematic = true;
-        GetComponent<Rigidbody2D>().mass = data.weight;
-        GetComponent<SpriteRenderer>().sprite = data.birdSprite;
+        
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        colliders = GetComponents<Collider2D>();
+        
+        rigidbody2D.isKinematic = true;
+        rigidbody2D.mass = data.weight;
+        spriteRenderer.sprite = data.birdSprite;
+
+        if (data.isTriangle)
+        {
+            EnableCollider<PolygonCollider2D>();
+        }
+        else
+        {
+            EnableCollider<CircleCollider2D>();
+        }
+        
+    }
+
+    private void EnableCollider<T>() where T : Collider2D
+    {
+        foreach (Collider2D collider1 in colliders)
+        {
+            collider1.enabled = collider1 is T;
+            
+            if (collider1 is CircleCollider2D circleCollider && typeof(T) == typeof(CircleCollider2D))
+            {
+                circleCollider.offset = data.offset;
+                circleCollider.radius = data.radius;
+            }
+        }
     }
 
     private void OnMouseDown()
@@ -75,12 +106,46 @@ public class Bird : MonoBehaviour
             else
             {
                 // 돌아가는 것은 새에
-                ReturnPosition(this);
+                ReturnPosition();
             }
         }
     }
 
-    public void ReturnPosition(Bird bird)
+    private void CollidersSwitch(bool isOn)
+    {
+        // 모든 Collider를 찾아서 끈다.
+        foreach (Collider2D collider1 in colliders)
+        {
+            collider1.enabled = isOn;
+        }
+    }
+
+    public void ResetBird(Vector3 spawnPoint)
+    {
+        transform.position = spawnPoint;
+        transform.rotation = Quaternion.identity;
+        rigidbody2D.isKinematic = true;
+        rigidbody2D.velocity = Vector2.zero;
+        rigidbody2D.angularVelocity = 0f;
+        birdState = BirdState.Appearing;
+    }
+
+    public void AttachBird(Vector3 attachPoint)
+    {
+        transform.position = attachPoint;
+        birdState = BirdState.Attached;
+        CollidersSwitch(false);
+    }
+
+    public void LaunchBird(Vector3 launchVelocity)
+    {
+        birdState = BirdState.Flying;
+        rigidbody2D.isKinematic = false;
+        rigidbody2D.velocity = launchVelocity;
+        CollidersSwitch(true);
+    }
+
+    public void ReturnPosition()
     {
         transform.position = startPoint;
         birdState = BirdState.Dragable;

@@ -31,10 +31,6 @@ public class BirdGrab : MonoBehaviour
         strapLines[1].enabled = false;
     }
 
-    private void OnMouseDown()
-    {
-        
-    }
 
     private void OnMouseDrag()
     {
@@ -66,15 +62,14 @@ public class BirdGrab : MonoBehaviour
         isAttached = false;
 
         Vector3 launchVelocity = (centerPoint.position - bird.transform.position) * power;
-        bird.GetComponent<Rigidbody2D>().isKinematic = false;
-        bird.GetComponent<Rigidbody2D>().velocity = launchVelocity;
-        bird.GetComponent<CircleCollider2D>().isTrigger = false;
-
-        bird.birdState = BirdState.Flying;
+        
+        bird.LaunchBird(launchVelocity);
 
         strapLines[0].enabled = false;
         strapLines[1].enabled = false;
         trajectoryLine.enabled = false;
+        
+        bird = null;
     }
     
     private void UpdateTrajectory()
@@ -113,19 +108,12 @@ public class BirdGrab : MonoBehaviour
 
         if (bird != null)
         {
-            bird.birdState = BirdState.Dragable;
-            bird.ReturnPosition(bird);
-            bird = readyBird;
-            bird.transform.position = centerPoint.position;
-            bird.birdState = BirdState.Attached;
+            bird.ReturnPosition();
         }
-        else
-        {
-            bird = readyBird;
-            bird.transform.position = centerPoint.position;
-            bird.birdState = BirdState.Attached;
-            readyBird = null;
-        }
+        
+        bird = readyBird;
+        bird.AttachBird(centerPoint.position);
+        readyBird = null;
         
         isAttached = true;
         strapLines[0].SetPosition(1, transform.position);

@@ -33,8 +33,8 @@ public class BirdSpawner : MonoBehaviour
         foreach (int birdId in birdIds)
         {
             Bird bird = birdPool.GetBird(birdId);
-            bird.transform.position = transform.position;
-            bird.gameObject.SetActive(true);
+            
+            bird.ResetBird(transform.position);
             
             activeBirds.Add(bird);
 

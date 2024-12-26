@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 885cd957c10c2734bac307ef6e0e1d51, type: 3}
-  m_Name: black
+  m_Name: blue
   m_EditorClassIdentifier: 
-  birdName: black
+  birdName: blue
   weight: 1
   speed: 1
-  birdSprite: {fileID: -1877615996, guid: 400005b700fceb04ca79ed2606569d1c, type: 3}
+  birdSprite: {fileID: 282828346, guid: 400005b700fceb04ca79ed2606569d1c, type: 3}
   skillType: 0
   isTriangle: 0
-  offset: {x: 0.03, y: -0.12}
-  radius: 0.48
+  offset: {x: 0.03, y: -0.03}
+  radius: 0.2
