@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   birdName: blue
   weight: 1
-  speed: 1
+  speed: 3
   birdSprite: {fileID: 282828346, guid: 400005b700fceb04ca79ed2606569d1c, type: 3}
   skillType: 0
   isTriangle: 0

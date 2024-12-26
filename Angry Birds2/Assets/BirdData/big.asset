@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: big
   m_EditorClassIdentifier: 
   birdName: big
-  weight: 1
+  weight: 8
   speed: 1
   birdSprite: {fileID: 1226167223, guid: 400005b700fceb04ca79ed2606569d1c, type: 3}
   skillType: 0

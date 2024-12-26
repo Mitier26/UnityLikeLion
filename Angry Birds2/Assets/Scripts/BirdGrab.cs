@@ -70,10 +70,12 @@ public class BirdGrab : MonoBehaviour
         trajectoryLine.enabled = false;
         
         bird = null;
+        trajectoryLine.positionCount = 0;
     }
     
     private void UpdateTrajectory()
     {
+        trajectoryLine.enabled = true;
         Vector3 velocity = (centerPoint.position - bird.transform.position) * power;
         Vector3 currentPosition = bird.transform.position;
 
