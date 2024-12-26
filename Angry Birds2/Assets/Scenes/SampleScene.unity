@@ -185,7 +185,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1134631766348380815, guid: 81e0d3d2f11aba046904f68220162505, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 667711879}
   m_SourcePrefab: {fileID: 100100000, guid: 81e0d3d2f11aba046904f68220162505, type: 3}
 --- !u!1 &519420028
 GameObject:
@@ -406,6 +409,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &667711874 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1134631766348380815, guid: 81e0d3d2f11aba046904f68220162505, type: 3}
+  m_PrefabInstance: {fileID: 473840023}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &667711879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667711874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9e5feab88ce5f42b19b6da7ed629e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 30
+  speedThreshold: 2
+  rotationThreshold: 10
+  rigidbody2d: {fileID: 0}
+  particles: {fileID: 0}
 --- !u!1 &700727018
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,10 +470,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 588200942839827734, guid: c38d536c1cd67e14c8b5bcd59b119397, type: 3}
-      propertyPath: m_Mass
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 6029995380812946247, guid: c38d536c1cd67e14c8b5bcd59b119397, type: 3}
       propertyPath: m_Name
       value: GlassRect3 (1)
@@ -1679,10 +1700,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GlassCircle
       objectReference: {fileID: 0}
-    - target: {fileID: 4280840706515069855, guid: 562e6928d3e8fd343bd6798aafda23cc, type: 3}
-      propertyPath: m_Mass
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8022948093806069408, guid: 562e6928d3e8fd343bd6798aafda23cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.26
@@ -1736,10 +1753,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 588200942839827734, guid: c38d536c1cd67e14c8b5bcd59b119397, type: 3}
-      propertyPath: m_Mass
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 6029995380812946247, guid: c38d536c1cd67e14c8b5bcd59b119397, type: 3}
       propertyPath: m_Name
       value: GlassRect3
@@ -1841,10 +1854,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GlassRect
       objectReference: {fileID: 0}
-    - target: {fileID: 9128773758631358235, guid: f4da0a1c40ed6914899a9899f245c5d6, type: 3}
-      propertyPath: m_Mass
-      value: 8
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1861,10 +1870,6 @@ PrefabInstance:
     - target: {fileID: 1134631766348380815, guid: 81e0d3d2f11aba046904f68220162505, type: 3}
       propertyPath: m_Name
       value: GlassTriange
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148777649370651743, guid: 81e0d3d2f11aba046904f68220162505, type: 3}
-      propertyPath: m_Mass
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6689979004094365334, guid: 81e0d3d2f11aba046904f68220162505, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1919,10 +1924,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1981793686997620843, guid: ed498b2def9547a459e840e85fb73355, type: 3}
-      propertyPath: m_Mass
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 4279662832840570086, guid: ed498b2def9547a459e840e85fb73355, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.23

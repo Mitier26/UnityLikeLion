@@ -11,6 +11,10 @@ public class BirdData : ScriptableObject
     public bool isTriangle;
     public Vector2 offset;
     public float radius;
+    
+    public float explosionRadius = 5f;
+    public float explosionDamage = 20f;
+    public GameObject explosionParticle;
 }
 
 public enum SkillType

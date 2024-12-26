@@ -27,8 +27,7 @@ public class Bird : MonoBehaviour
     public BirdState birdState = BirdState.Appearing;
     private bool isKillUsed;
     public Vector3 startPoint;
-    
-    public float maxDistance;
+
 
     public void InitBirdData(BirdData data)
     {
@@ -73,6 +72,7 @@ public class Bird : MonoBehaviour
         // 스킬 사용이 가능한 상태
         if (!isKillUsed && birdState == BirdState.Flying)
         {
+            UseSkill(data.skillType);
             isKillUsed = true;
         }
     }
@@ -156,6 +156,43 @@ public class Bird : MonoBehaviour
     {
         startPoint = transform.position;
         birdState = BirdState.Dragable;
+    }
+    
+    
+    private void UseSkill(SkillType skillType)
+    {
+        switch (skillType)
+        {
+            case SkillType.Explosive:
+                {
+                    Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, data.explosionRadius);
+
+                    foreach (Collider2D collider in hitColliders)
+                    {
+                        if (collider.TryGetComponent<Block>(out Block block))
+                        {
+                            block.TakeDamage(data.explosionDamage);
+                            Vector2 direction = collider.transform.position - transform.position;
+                            direction.Normalize();
+                            block.rigidbody2d.AddForce(direction * 20f, ForceMode2D.Impulse);
+                            Instantiate(data.explosionParticle, transform.position, Quaternion.identity);
+                        }
+                    }
+                    break;
+                }
+            case SkillType.Boost:
+                {
+                    break;
+                }
+            case SkillType.Split:
+                {
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
     }
 
 }

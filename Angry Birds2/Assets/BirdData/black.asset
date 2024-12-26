@@ -16,7 +16,10 @@ MonoBehaviour:
   weight: 6
   speed: 2
   birdSprite: {fileID: -1877615996, guid: 400005b700fceb04ca79ed2606569d1c, type: 3}
-  skillType: 0
+  skillType: 1
   isTriangle: 0
   offset: {x: 0.03, y: -0.12}
   radius: 0.48
+  explosionRadius: 5
+  explosionDamage: 20
+  explosionParticle: {fileID: 5407259096833001112, guid: 9b5c4291fdd94474ea5cedb8e090d76a, type: 3}
