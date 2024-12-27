@@ -15,6 +15,8 @@ public class BirdData : ScriptableObject
     public float explosionRadius = 5f;
     public float explosionDamage = 20f;
     public GameObject explosionParticle;
+
+    public GameObject[] blueBirds;
 }
 
 public enum SkillType

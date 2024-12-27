@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6614618960608986632}
   - component: {fileID: 4333764233142936862}
   - component: {fileID: 3601975227947210289}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4852,9 +4852,9 @@ GameObject:
   - component: {fileID: 5098258864829477561}
   - component: {fileID: 588200942839827734}
   - component: {fileID: 2653029932748421330}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GlassRect3
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

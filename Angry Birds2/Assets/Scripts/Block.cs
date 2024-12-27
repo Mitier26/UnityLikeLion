@@ -8,9 +8,9 @@ public class Block : MonoBehaviour
     public float health = 100f;
     public float speedThreshold = 2f;
     public float rotationThreshold = 10f;
+    private bool isBroken = false;
 
     public Rigidbody2D rigidbody2d;
-    
     public ParticleSystem particles;
 
     private void Start()
@@ -64,11 +64,14 @@ public class Block : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (isBroken) return;
+        
         health -= damage;
 
         if (health <= 0)
         {
             DestroyBlock();
+            isBroken = true;
         }
     }
 

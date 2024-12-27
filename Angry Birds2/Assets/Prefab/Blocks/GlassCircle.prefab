@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9215250192294919696}
   - component: {fileID: 1732868002765348102}
   - component: {fileID: 1572940156551556649}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4852,9 +4852,9 @@ GameObject:
   - component: {fileID: 4877510977319643380}
   - component: {fileID: 4280840706515069855}
   - component: {fileID: 4937429428075593703}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GlassCircle
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

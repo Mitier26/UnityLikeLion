@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class Bird : MonoBehaviour
 {
     // 새에게 있는 기능
@@ -182,10 +184,39 @@ public class Bird : MonoBehaviour
                 }
             case SkillType.Boost:
                 {
+                    rigidbody2D.AddForce(Vector2.right * 50f, ForceMode2D.Impulse);
                     break;
                 }
             case SkillType.Split:
                 {
+                    int splitCount = Random.Range(1, 4);
+                    Vector2 currenVelocity = rigidbody2D.velocity.normalized;
+
+                    for (int i = 0; i < splitCount; i++)
+                    {
+                        // 새를 가지고 오는 것이 문제!!
+                        GameObject splitBird = BlueBirdManager.Instance.GetBlueBird();
+                        
+                        splitBird.transform.position = transform.position;
+                        splitBird.transform.rotation = Quaternion.identity;
+                        splitBird.gameObject.SetActive(true);
+                        
+                        float angle = Random.Range(-30f, 30f);
+                        
+                        float rad = angle * Mathf.Deg2Rad;
+                        float cos = Mathf.Cos(rad);
+                        float sin = Mathf.Sin(rad);
+
+                        Vector3 direction = new Vector2(
+                            currenVelocity.x * cos - currenVelocity.y * sin,
+                            currenVelocity.x * sin + currenVelocity.y * cos
+                        );
+                        
+                        direction.Normalize();                       
+                        
+                        splitBird.GetComponent<Rigidbody2D>().AddForce(direction * 3f * rigidbody2D.velocity , ForceMode2D.Impulse);
+                    }
+                    
                     break;
                 }
             default:

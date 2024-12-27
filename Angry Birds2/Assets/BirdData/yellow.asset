@@ -20,3 +20,7 @@ MonoBehaviour:
   isTriangle: 1
   offset: {x: 0, y: 0}
   radius: 0
+  explosionRadius: 5
+  explosionDamage: 20
+  explosionParticle: {fileID: 0}
+  blueBirds: []

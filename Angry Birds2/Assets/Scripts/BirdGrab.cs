@@ -59,6 +59,8 @@ public class BirdGrab : MonoBehaviour
 
     private void Lanch()
     {
+        if (bird == null) return;
+        
         isAttached = false;
 
         Vector3 launchVelocity = (centerPoint.position - bird.transform.position) * power;

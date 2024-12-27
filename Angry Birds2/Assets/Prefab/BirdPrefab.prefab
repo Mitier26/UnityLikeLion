@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2012390118060248174}
   - component: {fileID: 5703502220978262067}
   - component: {fileID: 1083879034593629977}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BirdPrefab
   m_TagString: Bird
   m_Icon: {fileID: 0}
@@ -136,8 +136,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 0.1
+  m_AngularDrag: 2
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -216,4 +216,3 @@ MonoBehaviour:
   data: {fileID: 0}
   birdState: 0
   startPoint: {x: 0, y: 0, z: 0}
-  maxDistance: 0
