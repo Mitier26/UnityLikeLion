@@ -50,23 +50,24 @@ public class Block : MonoBehaviour
 
             // 데미지 적용
             float damage = totalImpactVelocity;
-            TakeDamage(damage);
+            TakeDamage(collision.contacts[0].point, damage);
 
             
             // 자신과 상대에게 동시에 대미지를 주기 때문에 주의 해야한다.
             Block otherBlock = collision.collider.GetComponent<Block>();
             if (otherBlock != null)
             {
-                otherBlock.TakeDamage(damage);
+                otherBlock.TakeDamage(collision.contacts[0].point, damage);
             }
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(Vector3 position, float damage)
     {
         if (isBroken) return;
         
         health -= damage;
+        TextManager.Instance.ShowDamageText(position,damage);
 
         if (health <= 0)
         {
@@ -78,7 +79,8 @@ public class Block : MonoBehaviour
     private void DestroyBlock()
     {
         // 사라지기 전에 이팩트 출력
-        particles.Play();
+        if (!particles.isPlaying)
+            particles.Play();
         // 초 후 에 사라짐
         Destroy(gameObject, 1f);
     }

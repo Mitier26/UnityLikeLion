@@ -15,7 +15,7 @@ public class Blue : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<Block>(out Block block))
         {
-            block.TakeDamage(damage);   
+            block.TakeDamage(other.contacts[0].point, damage);   
         }
     }
 }

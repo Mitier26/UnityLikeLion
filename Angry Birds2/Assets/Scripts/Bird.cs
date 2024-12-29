@@ -169,12 +169,12 @@ public class Bird : MonoBehaviour
                 {
                     Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, data.explosionRadius);
 
-                    foreach (Collider2D collider in hitColliders)
+                    foreach (Collider2D collider1 in hitColliders)
                     {
-                        if (collider.TryGetComponent<Block>(out Block block))
+                        if (collider1.TryGetComponent<Block>(out Block block))
                         {
-                            block.TakeDamage(data.explosionDamage);
-                            Vector2 direction = collider.transform.position - transform.position;
+                            block.TakeDamage(collider1.ClosestPoint(transform.position), data.explosionDamage);
+                            Vector2 direction = collider1.transform.position - transform.position;
                             direction.Normalize();
                             block.rigidbody2d.AddForce(direction * 20f, ForceMode2D.Impulse);
                             Instantiate(data.explosionParticle, transform.position, Quaternion.identity);
