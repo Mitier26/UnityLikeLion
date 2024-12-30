@@ -29,12 +29,16 @@ public class GameManager : MonoBehaviour
         InvokeRepeating(nameof(CheckAllBlockStopped), 0.5f, 0.5f);
     }
 
+    public void GameStart()
+    {
+        birdSpawner.MakeBirds();
+    }
+
     public void ChangeGameState(GameState newState)
     {
         if (gameState == newState) return;
 
         gameState = newState;
-        Debug.Log($"GameManager: GameState changed to {newState}");
 
         switch (gameState)
         {
@@ -63,15 +67,25 @@ public class GameManager : MonoBehaviour
     private void HandleEndedState()
     {
         CameraController.instance.StopFollowing();
+        bird = null;
+        birdSpawner.MakeBirds();
     }
-
+    
+    private float launchCooldown = 0.5f; // 발사 후 상태 체크를 지연하는 시간
+    private float lastLaunchTime = -1f;
+    
     private void CheckAllBlockStopped()
     {
-        if (gameState != GameState.Playing) return;
+        if (gameState != GameState.Playing || bird == null) return;
 
+        // 발사 후 상태 체크 지연
+        if (Time.time - lastLaunchTime < launchCooldown)
+        {
+            return;
+        }
+
+        // 모든 블록이 멈췄는지 확인
         bool allBlocksStopped = true;
-        bool birdStopped = bird == null || (!bird.isMoving && bird.birdState == BirdState.Flying);
-
         foreach (Block block in blocks)
         {
             if (block.isMoving)
@@ -81,10 +95,20 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // 새가 멈췄는지 확인
+        bool birdStopped = bird != null && bird.birdState == BirdState.Flying && !bird.isMoving;
+
+        // 새와 블록 모두 멈춘 경우만 Ended로 전환
         if (allBlocksStopped && birdStopped)
         {
             ChangeGameState(GameState.Ended);
         }
+    }
+
+    
+    public void OnBirdLaunch()
+    {
+        lastLaunchTime = Time.time; 
     }
 
     public void RegisterBird(Bird bird)

@@ -67,6 +67,7 @@ public class BirdGrab : MonoBehaviour
     
         GameManager.instance.RegisterBird(bird);
         GameManager.instance.ChangeGameState(GameState.Playing);
+        GameManager.instance.OnBirdLaunch();
         
         AudioManager.instance.PlaySfx(SfxTypes.Launch);
         

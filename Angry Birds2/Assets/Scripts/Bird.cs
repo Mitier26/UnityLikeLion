@@ -27,7 +27,7 @@ public class Bird : MonoBehaviour
     private Collider2D[] colliders;
     
     public BirdState birdState = BirdState.Appearing;
-    private bool isKillUsed;
+    private bool isSkillUsed;
     public Vector3 startPoint;
 
     public bool isMoving = false;
@@ -74,10 +74,10 @@ public class Bird : MonoBehaviour
     private void OnMouseDown()
     {
         // 스킬 사용이 가능한 상태
-        if (!isKillUsed && birdState == BirdState.Flying)
+        if (!isSkillUsed && birdState == BirdState.Flying)
         {
             UseSkill(data.skillType);
-            isKillUsed = true;
+            isSkillUsed = true;
         }
     }
 
@@ -132,6 +132,7 @@ public class Bird : MonoBehaviour
         rigidbody2D.velocity = Vector2.zero;
         rigidbody2D.angularVelocity = 0f;
         birdState = BirdState.Appearing;
+        isSkillUsed = false;
     }
 
     public void AttachBird(Vector3 attachPoint)
@@ -146,6 +147,13 @@ public class Bird : MonoBehaviour
         birdState = BirdState.Flying;
         rigidbody2D.isKinematic = false;
         rigidbody2D.velocity = launchVelocity;
+
+        CollidersSwitch(false);
+        Invoke(nameof(EnableColliders), 0.3f); 
+    }
+
+    private void EnableColliders()
+    {
         CollidersSwitch(true);
     }
 
@@ -180,9 +188,9 @@ public class Bird : MonoBehaviour
                             Vector2 direction = collider1.transform.position - transform.position;
                             direction.Normalize();
                             block.rigidbody2d.AddForce(direction * 20f, ForceMode2D.Impulse);
-                            Instantiate(data.explosionParticle, transform.position, Quaternion.identity);
                         }
                     }
+                    Instantiate(data.explosionParticle, transform.position, Quaternion.identity);
                     break;
                 }
             case SkillType.Boost:
@@ -233,6 +241,24 @@ public class Bird : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isMoving = rigidbody2D.velocity.magnitude > 0.1f;
+        // 현재 새의 속도와 상태 확인
+        bool isBelowThreshold = rigidbody2D.velocity.magnitude < 0.1f;
+
+        if (birdState == BirdState.Flying)
+        {
+            if (isBelowThreshold)
+            {
+                // 일정 시간 동안 멈춘 상태일 때만 처리
+                if (isMoving)
+                {
+                    isMoving = false;
+                }
+            }
+            else
+            {
+                // 속도가 임계값을 초과하면 이동 중으로 간주
+                isMoving = true;
+            }
+        }
     }
 }
