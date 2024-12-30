@@ -48,8 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170cfbbc85e2a064bb7e46eb93986e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tetrominoType: 2
-  dropTime: 1
+  tetrominoType: 1
+  dropTime: 0.3
+  leftLimitPosition: -5
+  rightLimitPosition: 5
+  bottomLimitPosition: -8.5
 --- !u!1 &826974110075717331
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +64,7 @@ GameObject:
   - component: {fileID: 6929541411909098241}
   - component: {fileID: 8256980642867676218}
   m_Layer: 0
-  m_Name: Square (2)
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,7 +148,7 @@ GameObject:
   - component: {fileID: 3568627171721346110}
   - component: {fileID: 9198005000962705273}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -229,7 +232,7 @@ GameObject:
   - component: {fileID: 2194021565086814610}
   - component: {fileID: 5368802456888984325}
   m_Layer: 0
-  m_Name: Square
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +316,7 @@ GameObject:
   - component: {fileID: 1962051603688389494}
   - component: {fileID: 2155941870446532690}
   m_Layer: 0
-  m_Name: Square (3)
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

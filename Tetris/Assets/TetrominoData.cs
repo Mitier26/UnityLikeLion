@@ -3,12 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public enum TetrominoType
+public enum TetrominoType : byte
 {
     None,
     I,
     O,
+    L,
+    J,
+    S,
+    Z,
+    T,
     Max,
 }
 
@@ -75,7 +81,37 @@ public class TetrominoData : MonoBehaviour
             {
                 transform.position -= Vector3.down;
                 canDrop = false;
-                GameObject tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_O");
+                GameObject tetrominoPrefab = null;
+                
+                TetrominoType nextBlockIndex = (TetrominoType)Random.Range(0, 7)+1;
+
+                switch (nextBlockIndex)
+                {
+                    case TetrominoType.I:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_I");
+                        break;
+                    case TetrominoType.O:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_O");
+                        break;
+                    case TetrominoType.L:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_L");
+                        break;
+                    case TetrominoType.J:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_J");
+                        break;
+                    case TetrominoType.S:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_S");
+                        break;
+                    case TetrominoType.Z:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_Z");
+                        break;
+                    case TetrominoType.T:
+                        tetrominoPrefab = Resources.Load<GameObject>($"Prefabs/Tetromino_T");
+                        break;
+                }
+                
+                Debug.Assert(tetrominoPrefab != null);
+                
                 Instantiate(tetrominoPrefab, new Vector2(0, 9), Quaternion.identity);
             }
             currentDropTime = dropTime;
