@@ -27,4 +27,28 @@ public class AudioManager : MonoBehaviour
     {
         sfxSource.PlayOneShot(sfxClips[(int)sfxType]);
     }
+
+    public void PlaySfxBlock(BlockTypes blockType)
+    {
+        SfxTypes sfxType;
+        
+        switch (blockType)
+        {
+            case BlockTypes.Glass:
+                sfxType = SfxTypes.GlassImpact;
+                break;
+
+            case BlockTypes.Wood:
+                sfxType = SfxTypes.WoodImpact;
+                break;
+
+            case BlockTypes.Metal:
+                sfxType = SfxTypes.MetalImpact;
+                break;
+
+            default:
+                return;
+        }
+        PlaySfx(sfxType);
+    }
 }

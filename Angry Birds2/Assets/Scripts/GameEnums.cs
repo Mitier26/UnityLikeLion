@@ -24,3 +24,17 @@ public enum SfxTypes
     PigDestroy,
     Open,
 }
+
+public enum BlockTypes
+{
+    Glass,
+    Wood,
+    Metal,
+}
+
+public enum GameState
+{
+    Ready,
+    Playing,
+    Ended,
+}

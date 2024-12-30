@@ -31,6 +31,10 @@ public class BirdGrab : MonoBehaviour
         strapLines[1].enabled = false;
     }
 
+    private void OnMouseDown()
+    {
+        AudioManager.instance.PlaySfx(SfxTypes.Pull);
+    }
 
     private void OnMouseDrag()
     {
@@ -60,6 +64,13 @@ public class BirdGrab : MonoBehaviour
     private void Lanch()
     {
         if (bird == null) return;
+    
+        GameManager.instance.RegisterBird(bird);
+        GameManager.instance.ChangeGameState(GameState.Playing);
+        
+        AudioManager.instance.PlaySfx(SfxTypes.Launch);
+        
+        CameraController.instance.StartFollowing(bird.transform);
         
         isAttached = false;
 

@@ -12,10 +12,16 @@ public class Block : MonoBehaviour
 
     public Rigidbody2D rigidbody2d;
     public ParticleSystem particles;
+    
+    public BlockTypes blockType;
+    
+    public bool isMoving = false;
 
     private void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        
+        GameManager.instance.RegisterBlock(this);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -68,6 +74,8 @@ public class Block : MonoBehaviour
         
         health -= damage;
         TextManager.Instance.ShowDamageText(position,damage);
+        
+        AudioManager.instance.PlaySfxBlock(blockType);
 
         if (health <= 0)
         {
@@ -78,10 +86,16 @@ public class Block : MonoBehaviour
 
     private void DestroyBlock()
     {
-        // 사라지기 전에 이팩트 출력
         if (!particles.isPlaying)
             particles.Play();
-        // 초 후 에 사라짐
+        
+        GameManager.instance.UnregisterBlock(this);
+        
         Destroy(gameObject, 1f);
+    }
+
+    private void FixedUpdate()
+    {
+        isMoving = rigidbody2d.velocity.magnitude > 0.1f;
     }
 }

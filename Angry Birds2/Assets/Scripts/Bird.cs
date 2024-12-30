@@ -30,6 +30,8 @@ public class Bird : MonoBehaviour
     private bool isKillUsed;
     public Vector3 startPoint;
 
+    public bool isMoving = false;
+
 
     public void InitBirdData(BirdData data)
     {
@@ -167,6 +169,7 @@ public class Bird : MonoBehaviour
         {
             case SkillType.Explosive:
                 {
+                    AudioManager.instance.PlaySfx(SfxTypes.Explosion);
                     Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, data.explosionRadius);
 
                     foreach (Collider2D collider1 in hitColliders)
@@ -184,11 +187,13 @@ public class Bird : MonoBehaviour
                 }
             case SkillType.Boost:
                 {
+                    AudioManager.instance.PlaySfx(SfxTypes.Dash);
                     rigidbody2D.AddForce(Vector2.right * 50f, ForceMode2D.Impulse);
                     break;
                 }
             case SkillType.Split:
                 {
+                    AudioManager.instance.PlaySfx(SfxTypes.Split);
                     int splitCount = Random.Range(1, 4);
                     Vector2 currenVelocity = rigidbody2D.velocity.normalized;
 
@@ -226,4 +231,8 @@ public class Bird : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        isMoving = rigidbody2D.velocity.magnitude > 0.1f;
+    }
 }
