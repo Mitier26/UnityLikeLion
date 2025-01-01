@@ -106,44 +106,34 @@
 
         void Update()
         {
+            // 화면에 조작 할 수 있는 블록이 있을 때만 작동한다.
             if (_currentTetrominoData.IsUnityNull())
                 return;
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                SetGridState(0);
-                _currentTetrominoData.transform.position += Vector3.left;
-                
-                if (checkBlockCollision() || GridOverlapCheck())
-                {
-                    _currentTetrominoData.transform.position -= Vector3.left;
-                }
-                SetGridState(1);
+                MoveBlock(Vector3.left);
             }
 
             if (Input.GetKeyDown(KeyCode.D))
             {
-                SetGridState(0);
-                _currentTetrominoData.transform.position += Vector3.right;
-                if (checkBlockCollision() || GridOverlapCheck())
-                {
-                    _currentTetrominoData.transform.position -= Vector3.right;
-                }
-                SetGridState(1);
+                MoveBlock(Vector3.right);
             }
 
             if (Input.GetKeyDown(KeyCode.W))
             {
-                SetGridState(0);
-                _currentTetrominoData.transform.Rotate(new Vector3(0, 0, -90));
-                
-                var (minX, minY, maxX, maxY) = GetGridState();
-                
-                if (checkBlockCollision()|| GridOverlapCheck() || 0 > minY)
-                {
-                    _currentTetrominoData.transform.Rotate(new Vector3(0, 0, 90));
-                }
-                SetGridState(1);
+                RotateBlock(-90);
+            }
+            
+            // 아래 키 입력
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                MoveBlock(Vector3.down);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                DropBlock();
             }
 
             currentDropTime -= Time.deltaTime;
@@ -171,7 +161,8 @@
                         SetGridState(0);
                         _currentTetrominoData.transform.position -= Vector3.down;                    
                         SetGridState(1);
-
+                        
+                        // 이것은 블록을 생성하기 전에 반드시 해야하는 것
                         foreach (var block in _currentTetrominoData.Blocks)
                         {
                             block.transform.SetParent(null);
@@ -179,10 +170,9 @@
                             gridBlock[y][x] = block.GetComponent<Block>();
                         }
 
-                        
+                        // 블록의 라인 체크
                         int yIndex = 0;
                         int count = grid[yIndex].Count(e => e == 1);
-                        Debug.Log(count);
 
                         if (LINE_MAX_INDEX == count)
                         {
@@ -219,6 +209,58 @@
             }
         }
 
+        private void MoveBlock(Vector3 direction)
+        {
+            // 그리드 배열을 세팅하는 것
+            SetGridState(0);
+                
+            // 이동하는 것! 배열료 이동하는 것이 아니고 
+            // 이돋을 하고 배열에 넣는다.
+            _currentTetrominoData.transform.position += direction;
+            var (minX, minY, maxX, maxY) = GetGridState();
+            // 중요한 체크!!!
+            if (checkBlockCollision() || GridOverlapCheck() || 0 > minY)
+            {
+                _currentTetrominoData.transform.position -= direction;
+            }
+            SetGridState(1);
+        }
+
+        private void RotateBlock(float angle)
+        {
+            SetGridState(0);
+            _currentTetrominoData.transform.Rotate(new Vector3(0, 0, angle));
+                
+            var (minX, minY, maxX, maxY) = GetGridState();
+                
+            if (checkBlockCollision()|| GridOverlapCheck() || 0 > minY)
+            {
+                _currentTetrominoData.transform.Rotate(new Vector3(0, 0, -angle));
+            }
+            SetGridState(1);
+        }
+
+        private void DropBlock()
+        {
+            SetGridState(0);
+            while (true)
+            {
+                _currentTetrominoData.transform.position += Vector3.down;
+                var (minX, minY, maxX, maxY) = GetGridState();
+                if (checkBlockCollision() || GridOverlapCheck() || 0 > minY)
+                {
+                    _currentTetrominoData.transform.position -= Vector3.down;
+                    break;
+                }
+                
+            }
+            SetGridState(1);
+            
+            // 다른 블록을 소환하기 전에 분리해야함.
+            
+            SpawnTetromino();
+        }
+
         private (int, int, int, int) GetGridState()
         {
             int minX = Int32.MaxValue;
@@ -251,6 +293,12 @@
                 
                 // 블록이 아래 있지 않거나 그리드의 1 ( 블록 있음 ) 이면
                 // 블록이 게임판 안에 있는데 다른 블록이 있으면
+                
+                // 조건문은 블록이 게임판 안에 있을 때!
+                // offset을 이용해 왼쪽 아래가 0,0 이라는 것을 명심한다.
+                // 현재 움직이고 있는 블록의 자식이 게임판 안에 있을 때
+                // 그리드의 값이 1 이면 멈춘다.
+                // 블록이 있는 곳은 1
                 if (y >= 0 && x >= 0 && x < grid[y].Length && grid[y][x] == 1)
                 {
                     return true;
@@ -266,6 +314,7 @@
             {
                 var (x, y) = GetXYIndex(block);
 
+                // 입력 받는 state에 따라 0 또는 1로 배열에 저장
                 if (y >= 0 && x >= 0 && x < grid[y].Length) 
                     grid[y][x] = state;
             }
@@ -273,8 +322,12 @@
 
         private static (int, int) GetXYIndex(Transform block)
         {
+            // 자식 블록의 위치를 배열의 인덱스로 사용
+            // offset는 왼쪽 아래를 0,0으로 맞추기 위함
             int y = Mathf.RoundToInt(block.transform.position.y + Y_OFFSET);
             int x = Mathf.RoundToInt(block.transform.position.x + X_OFFSET);
+            
+            // 자식 블록의 위치에 따른 x, y 좌표
             return (x, y);
         }
 
@@ -288,7 +341,10 @@
             GameObject spawndTetromino = Instantiate(Tetromino_Prefab, spawnPoint.position, Quaternion.identity);
             spawndTetromino.TryGetComponent(out _currentTetrominoData);
             // out
-            // 
+            // 생성된 spawndTetromino 에 currentTetrominoData가 있으면 currentTetromino에 타입에 맞는 값을 넣어라.
+            // currentTetromino의 타입은 TetrominoData!!!
+            // 생성되는 오브젝트는 TetrominoData를 가지고 있는 오브젝트
+            // 그래서 currentTetromino에 넣음
         }
 
 
@@ -297,6 +353,7 @@
             foreach (var block in _currentTetrominoData.Blocks)
             {
                 var (x, y) = GetXYIndex(block);
+                // 블럭이 밖으로 나가지 못함
                 if (x < 0 || x >= grid[0].Length)
                 {
                     return true;

@@ -387,10 +387,7 @@ MonoBehaviour:
       Value: Tetromino_L
     - Key: 7
       Value: Tetromino_T
-  dropTime: 0.2
-  leftLimitPosition: -5
-  rightLimitPosition: 5
-  bottomLimitPosition: -9
+  dropTime: 1
 --- !u!4 &726127151
 Transform:
   m_ObjectHideFlags: 0
