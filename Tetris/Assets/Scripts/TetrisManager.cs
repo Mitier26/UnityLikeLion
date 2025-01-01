@@ -107,6 +107,9 @@
         void Update()
         {
             // 화면에 조작 할 수 있는 블록이 있을 때만 작동한다.
+            
+            // 방향키를 입렵하면서 떨어지면 분해가 안됨.
+            
             if (_currentTetrominoData.IsUnityNull())
                 return;
 
@@ -163,43 +166,11 @@
                         SetGridState(1);
                         
                         // 이것은 블록을 생성하기 전에 반드시 해야하는 것
-                        foreach (var block in _currentTetrominoData.Blocks)
-                        {
-                            block.transform.SetParent(null);
-                            var (x, y) = GetXYIndex(block);
-                            gridBlock[y][x] = block.GetComponent<Block>();
-                        }
+                        // 부모 분해, 여기서 부모가 살아 있다 제거하자
+                        FixBlock();
 
                         // 블록의 라인 체크
-                        int yIndex = 0;
-                        int count = grid[yIndex].Count(e => e == 1);
-
-                        if (LINE_MAX_INDEX == count)
-                        {
-                            for (var i = 0; i < grid[yIndex].Length; i++)
-                            {
-                                grid[yIndex][i] = 0;
-                                Destroy(gridBlock[yIndex][i].gameObject);
-                                gridBlock[yIndex][i] = null;
-                            }
-
-                            for (int i = 0; i < grid.Length - 1; ++i)
-                            {
-                                grid[i] = grid[i + 1];
-                                for (int x = 0; x < gridBlock[i].Length; ++x)
-                                {
-                                    if (gridBlock[i][x])
-                                        gridBlock[i][x].transform.position += Vector3.down;
-                                }
-                                gridBlock[i] = gridBlock[i + 1];
-                            }
-                            
-                            for (var i = 0; i < grid[^1].Length; i++)
-                            {
-                                grid[^1][i] = 0;
-                                gridBlock[^1][i] = null;
-                            }
-                        }
+                        DeleteLines();
                         
                         SpawnTetromino();
                     }
@@ -257,8 +228,74 @@
             SetGridState(1);
             
             // 다른 블록을 소환하기 전에 분리해야함.
+            FixBlock();
+            
+            DeleteLines();
             
             SpawnTetromino();
+        }
+
+        private void FixBlock()
+        {
+            GameObject parent = _currentTetrominoData.gameObject;
+            foreach (var block in _currentTetrominoData.Blocks)
+            {
+                block.transform.SetParent(null);
+                var (x, y) = GetXYIndex(block);
+                gridBlock[y][x] = block.GetComponent<Block>();
+            }
+            Destroy(parent);
+        }
+
+        private void DeleteLines()
+        {
+            List<int> deleteLines = new List<int>();
+
+            for (int y = 0; y < grid.Length; ++y)
+            {
+                int count = grid[y].Count(e => e == 1);
+                
+                if(count == LINE_MAX_INDEX)
+                    deleteLines.Add(y);
+            }
+
+            if (deleteLines.Count == 0) return;
+                
+            for (int i = deleteLines.Count - 1; i >= 0; i--)
+            {
+                int row = deleteLines[i];
+
+                // 현재 줄의 블록을 삭제
+                for (int x = 0; x < grid[row].Length; x++)
+                {
+                    grid[row][x] = 0;
+                    if (gridBlock[row][x] != null)
+                    {
+                        Destroy(gridBlock[row][x].gameObject);
+                        gridBlock[row][x] = null;
+                    }
+                }
+
+                // 위의 모든 줄을 아래로 이동
+                for (int y = row; y < grid.Length - 1; y++)
+                {
+                    grid[y] = grid[y + 1];
+                    gridBlock[y] = gridBlock[y + 1];
+
+                    // 블록의 실제 위치도 업데이트
+                    for (int x = 0; x < gridBlock[y].Length; x++)
+                    {
+                        if (gridBlock[y][x] != null)
+                        {
+                            gridBlock[y][x].transform.position += Vector3.down;
+                        }
+                    }
+                }
+
+                // 가장 위 줄 초기화
+                grid[^1] = new int[LINE_MAX_INDEX];
+                gridBlock[^1] = new Block[LINE_MAX_INDEX];
+            }
         }
 
         private (int, int, int, int) GetGridState()
