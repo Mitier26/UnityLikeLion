@@ -434,70 +434,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3485761234760320015, guid: f97b75efa0625424593744c0b0421b3c,
-        type: 3}
-      propertyPath: defaultState
-      value: IdleState
-      objectReference: {fileID: 0}
-    - target: {fileID: 6753990723630694889, guid: f97b75efa0625424593744c0b0421b3c,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9034735382766966251, guid: f97b75efa0625424593744c0b0421b3c,
-        type: 3}
-      propertyPath: m_Drag
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 100096, guid: f97b75efa0625424593744c0b0421b3c,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1326847704}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f97b75efa0625424593744c0b0421b3c, type: 3}
---- !u!1 &1326847689 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100096, guid: f97b75efa0625424593744c0b0421b3c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1326847688}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1326847704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1326847689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24fec08a8e352a345b2f85b211b78599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForce: 3
-  moveSpeed: 3
-  animator: {fileID: 0}
-  rigidbody: {fileID: 0}
-  moveInput:
-    m_Name: Move Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: c5f2de9c-6c1f-487f-804c-3d7a898136ce
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  jumpInput:
-    m_Name: Jump Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 0f1b88b9-8603-41ab-a5d2-045f97e86da5
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!1001 &1896757848
 PrefabInstance:
   m_ObjectHideFlags: 0
