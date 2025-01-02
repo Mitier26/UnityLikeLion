@@ -55,7 +55,6 @@
             base.OnAwake();
             
             // 여기 TetrisManager 에서 사용할 Awake
-            
             InitialGrid();
         }
 
@@ -110,6 +109,13 @@
             
             // 방향키를 입렵하면서 떨어지면 분해가 안됨.
             
+            UserInput();
+            AutoDropBlock();
+        }
+
+        private void UserInput()
+        {
+            
             if (_currentTetrominoData.IsUnityNull())
                 return;
 
@@ -138,7 +144,10 @@
             {
                 DropBlock();
             }
+        }
 
+        private void AutoDropBlock()
+        {
             currentDropTime -= Time.deltaTime;
             if (currentDropTime <= 0.0f)
             {
@@ -150,6 +159,8 @@
                 {
                     _currentTetrominoData.transform.position -= Vector3.down;
                     SetGridState(1);
+                    FixBlock();
+                    DeleteLines();
                     SpawnTetromino();
                 }
                 else
@@ -171,7 +182,6 @@
 
                         // 블록의 라인 체크
                         DeleteLines();
-                        
                         SpawnTetromino();
                     }
                 }
@@ -271,6 +281,7 @@
                     grid[row][x] = 0;
                     if (gridBlock[row][x] != null)
                     {
+                        // 그냥 사라지는 것이 아니고 천천히 사라지고 싶다.
                         Destroy(gridBlock[row][x].gameObject);
                         gridBlock[row][x] = null;
                     }
