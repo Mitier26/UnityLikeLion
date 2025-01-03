@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[State("JumpState")]
 public class JumpState : MonoBehaviour, IState
 {
     public StateMachine Fsm { get; set; }

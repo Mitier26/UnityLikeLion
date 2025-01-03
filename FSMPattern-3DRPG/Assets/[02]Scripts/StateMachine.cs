@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using STC = StateTypesClasses;
 
 public enum StaterType
 {
@@ -20,11 +21,11 @@ public static class StateFactory
         switch (staterType)
         {
             case StaterType.Character:
-                {
-                    states.Add(stateMachine.AddComponent<IdleState>());
-                    states.Add(stateMachine.AddComponent<WalkState>());
-                    states.Add(stateMachine.AddComponent<JumpState>());
-                }
+            {
+                states.Add(stateMachine.AddComponent<IdleState>());
+                states.Add(stateMachine.AddComponent<WalkState>());
+                states.Add(stateMachine.AddComponent<JumpState>());
+            }
                 break;
         }
 
@@ -37,7 +38,7 @@ public class StateMachine : MonoBehaviour
     [SerializeField] private string defaultState;
     
     private IState currentState;
-    private Dictionary<Type, IState> states = new Dictionary<Type, IState>();
+    private Dictionary<STC.StateTypes, IState> states = new Dictionary<STC.StateTypes, IState>();
 
     public void Run()
     {
@@ -55,7 +56,7 @@ public class StateMachine : MonoBehaviour
     public void AddState(IState state, IBlackboardBase blackboard){
         state.Fsm = this;
         state.InitState(blackboard);
-        states.Add(state.GetType(), state);
+        states.Add(STC.GetState(state.GetType()), state);
     }
     
     public void ChangeState<T>() where T : IState
@@ -63,7 +64,12 @@ public class StateMachine : MonoBehaviour
         ChangeState(typeof(T));
     }
     
-    private void ChangeState(Type stateType)
+    public void ChangeState(Type stateType)
+    {
+        ChangeState(STC.GetState(stateType));
+    }
+
+    public void ChangeState(STC.StateTypes stateType)
     {
         currentState?.Exit();
 

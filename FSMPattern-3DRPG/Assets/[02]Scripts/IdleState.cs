@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[State("IdleState")]
 public class IdleState : MonoBehaviour, IState, IRecevieInput
 {
     public StateMachine Fsm { get; set; }

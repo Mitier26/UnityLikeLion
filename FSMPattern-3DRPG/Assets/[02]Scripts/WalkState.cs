@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[State("WalkState")]
 public class WalkState : MonoBehaviour, IState, IRecevieInput
 {   public StateMachine Fsm { get; set; }
     public Blackboard_Default Blackboard { get; set; }

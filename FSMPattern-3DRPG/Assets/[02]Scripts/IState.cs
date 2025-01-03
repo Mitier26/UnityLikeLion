@@ -1,4 +1,3 @@
-
 public interface IState
 {
     StateMachine Fsm { get; set; }
