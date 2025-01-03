@@ -1,11 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class IdleState : MonoBehaviour, IState
+public class IdleState : MonoBehaviour, IState, IRecevieInput
 {
-    public StateMachine FSM { get; set; }
+    public StateMachine Fsm { get; set; }
     
     public Blackboard_Default Blackboard { get; set; }
+    
+    private bool jumpInputTriggered = false;
+    private Vector2 moveInput = Vector2.zero;
     
     public void InitState(IBlackboardBase blackboard)
     {
@@ -14,26 +18,45 @@ public class IdleState : MonoBehaviour, IState
 
     public void Enter()
     {
+        PlayerController.Instance.AddInputObserver(Fsm.gameObject, this);
+        PlayerController.Instance.AddInputObserver(Fsm.gameObject,  this);
+        
         Blackboard.animator.CrossFade("Idles", 0.1f);
         Blackboard.animator.SetFloat("Speed", 0.0f);
     }
 
     public void UpdateState(float deltaTime)
     {
-        if (Blackboard.jumpInput.triggered && Blackboard.rigidbody.velocity.y == 0.0f)
+        if (jumpInputTriggered && Blackboard.rigidbody.velocity.y == 0.0f)
         {
-            FSM.ChangeState<JumpState>();
+            Fsm.ChangeState<JumpState>();
             return;
         }
         
-        var value = Blackboard.moveInput.ReadValue<Vector2>();
-        if (value.sqrMagnitude > 0)
+        if (moveInput.sqrMagnitude > 0)
         {
-            FSM.ChangeState<WalkState>();
+            Fsm.ChangeState<WalkState>();
         }
     }
 
     public void Exit()
     {
+        PlayerController.Instance.AddInputObserver(Fsm.gameObject,  null);
+        PlayerController.Instance.AddInputObserver(Fsm.gameObject, null);
+        
+        jumpInputTriggered = false;
+        moveInput = Vector2.zero;
+    }
+
+    public void OnTriggered(string action, bool triggerValue)
+    {
+        if (action == "Jump")
+            jumpInputTriggered = triggerValue;
+    }
+
+    public void OnReadValue(string action, Vector2 value)
+    {
+        if (action == "Move")
+            moveInput = value;
     }
 }

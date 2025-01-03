@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class JumpState : MonoBehaviour, IState
 {
-    public StateMachine FSM { get; set; }
+    public StateMachine Fsm { get; set; }
     
     public Blackboard_Default Blackboard { get; set; }
     
@@ -21,12 +21,11 @@ public class JumpState : MonoBehaviour, IState
     {
         if (Blackboard.rigidbody.velocity.y == 0.0f)
         {
-            FSM.ChangeState<IdleState>();
+            Fsm.ChangeState<IdleState>();
         }
     }
 
     public void Exit()
     {
     }
-
 }

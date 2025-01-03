@@ -53,7 +53,7 @@ public class StateMachine : MonoBehaviour
     }
     
     public void AddState(IState state, IBlackboardBase blackboard){
-        state.FSM = this;
+        state.Fsm = this;
         state.InitState(blackboard);
         states.Add(state.GetType(), state);
     }
@@ -68,6 +68,7 @@ public class StateMachine : MonoBehaviour
         currentState?.Exit();
 
         if (!states.TryGetValue(stateType, out currentState)) return;
+        
         currentState?.Enter();
     }
 
