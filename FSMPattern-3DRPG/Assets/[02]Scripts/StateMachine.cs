@@ -7,7 +7,8 @@ using STC = StateTypesClasses;
 public enum StaterType
 {
     None,
-    Character,
+    Player,
+    Monster,
     Max
 }
 
@@ -20,12 +21,19 @@ public static class StateFactory
         
         switch (staterType)
         {
-            case StaterType.Character:
+            case StaterType.Player:
             {
                 states.Add(stateMachine.AddComponent<IdleState>());
                 states.Add(stateMachine.AddComponent<WalkState>());
                 states.Add(stateMachine.AddComponent<JumpState>());
             }
+                break;
+            case StaterType.Monster:
+                {
+                    states.Add(stateMachine.AddComponent<IdleState_Monster>());
+                    states.Add(stateMachine.AddComponent<WalkState_Monster>());
+                    states.Add(stateMachine.AddComponent<SkillState_Monster>());
+                }
                 break;
         }
 
@@ -40,11 +48,11 @@ public class StateMachine : MonoBehaviour
     private IState currentState;
     private Dictionary<STC.StateTypes, IState> states = new Dictionary<STC.StateTypes, IState>();
 
-    public void Run()
+    public void Run(StaterType staterType)
     {
         IBlackboardBase blackboardDefault = GetComponent<IBlackboardBase>();
         blackboardDefault.InitBlackboard();
-        List<IState> states = this.CreateStates(StaterType.Character);
+        List<IState> states = this.CreateStates(staterType);
         foreach (var state in states)
         {
             AddState(state, blackboardDefault);

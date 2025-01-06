@@ -9,6 +9,7 @@ public class CustomTag : MonoBehaviour
 
     private void Start()
     {
-        PlayerController.Instance.AddObserver(tag, gameObject);
+        if(!string.IsNullOrEmpty(tag))
+            PlayerController.Instance.AddObserver(tag, gameObject);
     }
 }

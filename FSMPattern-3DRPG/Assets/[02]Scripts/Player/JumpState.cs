@@ -5,11 +5,11 @@ public class JumpState : MonoBehaviour, IState
 {
     public StateMachine Fsm { get; set; }
     
-    public Blackboard_Default Blackboard { get; set; }
+    public Blackboard_Player Blackboard { get; set; }
     
     public void InitState(IBlackboardBase blackboard)
     {
-        Blackboard = blackboard as Blackboard_Default;
+        Blackboard = blackboard as Blackboard_Player;
     }
 
     public void Enter()

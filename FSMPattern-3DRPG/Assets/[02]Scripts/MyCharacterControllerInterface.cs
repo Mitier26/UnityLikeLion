@@ -8,7 +8,7 @@ public class MyCharacterControllerInterface : MonoBehaviour
     private void Start()
     {
         stateMachine = GetComponent<StateMachine>();
-        stateMachine.Run();
+        // stateMachine.Run();
     }
 
     private void Update()

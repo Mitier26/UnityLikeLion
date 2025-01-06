@@ -1,7 +1,6 @@
 public interface IState
 {
     StateMachine Fsm { get; set; }
-    public Blackboard_Default Blackboard { get; set; }
 
     void InitState(IBlackboardBase blackboard);
     

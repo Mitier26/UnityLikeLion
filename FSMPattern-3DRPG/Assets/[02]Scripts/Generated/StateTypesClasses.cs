@@ -4,11 +4,16 @@ public class StateTypesClasses
 {
 	public enum StateTypes
 	{
-		None,
-		IdleState,
-		JumpState,
-		WalkState,
-		Max
+        None,
+        Chase,
+        ChaseState,
+        IdleState,
+        JumpState,
+        Skill,
+        SkillState,
+        WalkState,
+        Max
+
 	}
 	private static readonly Dictionary<Type, StateTypes> TypeToState = new()
 	{

@@ -7,14 +7,14 @@ public class IdleState : MonoBehaviour, IState, IRecevieInput
 {
     public StateMachine Fsm { get; set; }
     
-    public Blackboard_Default Blackboard { get; set; }
+    public Blackboard_Player Blackboard { get; set; }
     
     private bool jumpInputTriggered = false;
     private Vector2 moveInput = Vector2.zero;
     
     public void InitState(IBlackboardBase blackboard)
     {
-        Blackboard = blackboard as Blackboard_Default;
+        Blackboard = blackboard as Blackboard_Player;
     }
 
     public void Enter()
