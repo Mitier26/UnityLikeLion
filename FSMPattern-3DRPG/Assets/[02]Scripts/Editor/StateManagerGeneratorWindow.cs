@@ -43,7 +43,7 @@ public class StateManagerGeneratorWindow : EditorWindow
             }
 
             var List = enums.Keys.OrderBy(s => s).ToList();
-            var savePath = "Assets/Scripts/Generated";
+            var savePath = "Assets/[02]Scripts/Generated";
             StringBuilder sb = new StringBuilder();
             
             if (!Directory.Exists(savePath))
