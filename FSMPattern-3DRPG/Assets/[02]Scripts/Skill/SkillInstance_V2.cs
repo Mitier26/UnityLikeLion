@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICondition
+public interface ICondition<T>
 {
     bool IsTrue();
+    
+    T GetOutput();
 }
 
 public abstract class Condition
@@ -39,7 +41,7 @@ public class SkillInstance_V2 : MonoBehaviour
     {
         skillCoolTimer = GetComponent<SkillCoolTimer_V2>();
         skillCoolTimer.skillData = skillData;
-        blackboardMonster = GetComponent<Blackboard_Monster>();
+        // blackboardMonster = GetComponent<Blackboard_Monster>();
         
     }
 
