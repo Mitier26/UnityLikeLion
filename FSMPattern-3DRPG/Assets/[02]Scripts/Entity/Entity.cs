@@ -10,6 +10,7 @@ using UnityEngine.AI;
     RequireComponent(typeof(StateMachine)),
     RequireComponent(typeof(Animator)),
     RequireComponent(typeof(CustomTag)),
+    RequireComponent(typeof(SkillController)),
 ]
 public abstract class Entity : MonoBehaviour
 {

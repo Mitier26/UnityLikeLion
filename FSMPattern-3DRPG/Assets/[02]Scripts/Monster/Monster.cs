@@ -30,8 +30,6 @@ public class Monster : Entity
 
     public void OnDetectPlayer(Player player)
     {
-        Debug.Log("1111111111"+player);
-        Debug.Log("2222222222"+monster);
         monster.target = player;
     }
 }
