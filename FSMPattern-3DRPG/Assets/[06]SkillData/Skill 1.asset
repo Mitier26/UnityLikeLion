@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64bb07a4b6091c9469354abee37108e0, type: 3}
   m_Name: Skill 1
   m_EditorClassIdentifier: 
-  skillName: 
+  skillName: Skill1
   skillIcon: 
-  skillAnimation: 
-  skillDuration: 
-  skillCoolTime: 0
-  skillEnableDistance: 0
+  skillAnimation: HandUp
+  GetSkillDuration: 2
+  skillCoolTime: 3
+  skillEnableDistance: 3

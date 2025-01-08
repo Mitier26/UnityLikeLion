@@ -17,6 +17,16 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 45b1f2a8bd1313b43b8a7d55b79694f1
   m_SerializeEntries:
+  - m_GUID: 73e49d23f6a2edd4f82a7e339d10bf4a
+    m_Address: Assets/[06]SkillData/Skill 2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac8ceb85403113a499ee1f307200c7d8
+    m_Address: Assets/[06]SkillData/Skill 3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fccb87719300d02469d19168d02a8114
     m_Address: Assets/[06]SkillData/Skill 1.asset
     m_ReadOnly: 0
