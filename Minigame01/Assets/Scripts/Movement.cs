@@ -41,9 +41,16 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!GameManager.instance.isplaying) return;
+        
         // 이동 처리
         Vector2 moveVector2 = movementAction.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveVector2.x * speed,moveVector2.y * speed);
+        
+        Vector2 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, -49, 49);
+        pos.y = Mathf.Clamp(pos.y, -49, 49);
+        transform.position = pos;
     }
 
 

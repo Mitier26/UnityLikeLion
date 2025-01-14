@@ -33,7 +33,7 @@ public class Shooter : MonoBehaviour
         if (shoot.triggered)
         {
             Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity).GetComponent<Bullet>();
-            bullet.SetBullet(Vector2.up);
+            bullet.SetBullet(transform.up);
         }
     }
 }

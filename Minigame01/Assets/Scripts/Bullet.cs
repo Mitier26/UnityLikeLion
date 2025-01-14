@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    [NonSerialized] public float speed = 10f;
+    private Rigidbody2D rb;
+    [NonSerialized] public float speed = 15f;
+    public float damage = 10f;
     public Vector2 direction;
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -20,4 +21,17 @@ public class Bullet : MonoBehaviour
         rb.velocity = this.direction * this.speed;
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+            var enemy = other.GetComponent<EnemyStateMachine>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage, player );
+            }
+            Destroy(gameObject);
+        }
+    }
 }
