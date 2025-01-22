@@ -1,0 +1,3 @@
+repository "Plastic-scm-practice/Plastic-scm-practice@648923@cloud"
+  path "/"
+    smartbranch "/main" changeset "8"   
