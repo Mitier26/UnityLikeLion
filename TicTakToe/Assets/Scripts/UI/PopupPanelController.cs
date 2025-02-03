@@ -1,0 +1,63 @@
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using DG.Tweening;
+
+[RequireComponent(typeof(CanvasGroup))]
+public class PopupPanelController : Singleton<PopupPanelController>
+{
+    [SerializeField] private TMP_Text contentText;
+    [SerializeField] private Button confirmButton;
+    [SerializeField] private TMP_Text confirmButtonText;
+
+    [SerializeField] private RectTransform panelRectTransform;
+
+    private CanvasGroup _canvasGroup;
+    
+    private void Start()
+    {
+        _canvasGroup = GetComponent<CanvasGroup>();
+        
+        Hide();
+    }
+
+    public void Show(string content, string confirmButtonText, bool isAnimation, Action confirmAction)
+    {
+        gameObject.SetActive(true);
+
+        // 애니메이션 초기화
+        _canvasGroup.alpha = 0;
+        panelRectTransform.localScale = Vector3.zero;
+
+        if (isAnimation)
+        {
+            panelRectTransform.DOScale(1f, 5f);
+            _canvasGroup.DOFade(1f, 5f);
+        }
+        else
+        {
+            panelRectTransform.localScale = Vector3.one;
+            _canvasGroup.alpha = 1;
+        }
+        
+        contentText.text = content;
+        this.confirmButtonText.text = confirmButtonText;
+        confirmButton.onClick.AddListener(() =>
+        {
+            confirmAction();
+            Hide();
+        });
+    }
+
+    public void Hide()
+    {
+        contentText.text = "";
+        this.confirmButtonText.text = "";
+        confirmButton.onClick.RemoveAllListeners();
+        
+        gameObject.SetActive(false);
+    }
+}
