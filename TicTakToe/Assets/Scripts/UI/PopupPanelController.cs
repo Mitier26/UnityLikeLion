@@ -21,7 +21,7 @@ public class PopupPanelController : Singleton<PopupPanelController>
     {
         _canvasGroup = GetComponent<CanvasGroup>();
         
-        Hide();
+        Hide(false);
     }
 
     public void Show(string content, string confirmButtonText, bool isAnimation, Action confirmAction)
@@ -34,8 +34,8 @@ public class PopupPanelController : Singleton<PopupPanelController>
 
         if (isAnimation)
         {
-            panelRectTransform.DOScale(1f, 5f);
-            _canvasGroup.DOFade(1f, 5f);
+            panelRectTransform.DOScale(1f, 0.2f);
+            _canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutBack);
         }
         else
         {
@@ -48,16 +48,32 @@ public class PopupPanelController : Singleton<PopupPanelController>
         confirmButton.onClick.AddListener(() =>
         {
             confirmAction();
-            Hide();
+            Hide(true);
         });
     }
 
-    public void Hide()
+    public void Hide(bool isAnimation)
     {
-        contentText.text = "";
-        this.confirmButtonText.text = "";
-        confirmButton.onClick.RemoveAllListeners();
+        if (isAnimation)
+        {
+            panelRectTransform.DOScale(0f, 0.2f).OnComplete(() =>
+            {
+                contentText.text = "";
+                this.confirmButtonText.text = "";
+                confirmButton.onClick.RemoveAllListeners();
         
-        gameObject.SetActive(false);
+                gameObject.SetActive(false);
+            });
+            _canvasGroup.DOFade(0f, 0.2f).SetEase(Ease.InBack);
+        }
+        else
+        {
+            contentText.text = "";
+            this.confirmButtonText.text = "";
+            confirmButton.onClick.RemoveAllListeners();
+        
+            gameObject.SetActive(false);
+        }
+       
     }
 }
