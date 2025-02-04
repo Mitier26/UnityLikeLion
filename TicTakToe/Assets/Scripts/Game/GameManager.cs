@@ -7,6 +7,8 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private BlockController blockController;
 
+    [SerializeField] private GameObject startPanel;
+
     private enum PlayerType { None, PlayerA, PlayerB }
 
     private PlayerType[,] _board; // 틱택토 게임판의 정보를 담는 것
@@ -38,12 +40,29 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void StartGame()
     {
+        startPanel.SetActive(false);
         SetTurn(TurnType.PlayerA);
     }
-
-    private void EndGame()
+    
+    /// <summary>
+    /// 게임 오버시 호출되는 함수
+    /// gameResult에 따라 결과 출력
+    /// </summary>
+    /// <param name="gameResult">v</param>
+    private void EndGame(GameResult gameResult)
     {
-
+        switch (gameResult)
+        {
+            case GameResult.Win:
+                Debug.Log("You win!");
+                break;
+            case GameResult.Lose:
+                Debug.Log("You lose!");
+                break;
+            case GameResult.Draw:
+                Debug.Log("Draw!");
+                break;
+        }
     }
 
     /// <summary>
@@ -55,13 +74,13 @@ public class GameManager : Singleton<GameManager>
     /// <returns>False가 반환되면 할당할 수 없음, True는 할당이 완료 됨 </returns>
     private bool SetNewBoardValue(PlayerType playerType, int row, int col)
     {
-        if (playerType == PlayerType.PlayerA)
+        if (playerType == PlayerType.PlayerA && _board[row, col] == PlayerType.None)
         {
             _board[row,col] = playerType;
             blockController.PlaceMarker(Block.MarkerType.O, row, col);
             return true;
         }
-        else if (playerType == PlayerType.PlayerB)
+        else if (playerType == PlayerType.PlayerB  && _board[row, col] == PlayerType.None)
         {
             _board[row, col] = playerType;
             blockController.PlaceMarker(Block.MarkerType.X, row, col);
@@ -80,35 +99,39 @@ public class GameManager : Singleton<GameManager>
 
                 blockController.OnBlockClickedDelegate = (row, col) =>
                 {
-                    SetNewBoardValue(PlayerType.PlayerA, row, col);
+                    if (SetNewBoardValue(PlayerType.PlayerA, row, col))
+                    {
+                        var gameResult = CheckGameResult();
+                        if(gameResult == GameResult.None)
+                            SetTurn(TurnType.PlayerB);
+                        else
+                            EndGame(gameResult);
+                    }
+                    else
+                    {
+                        // TODO: 이미 있는 곳을 터치했을 때 처리
+                        Debug.Log("이미 있는 곳");
+                    }
                 };
                 
                 break;
             case TurnType.PlayerB:
-                // TODO: 입력 받기
-                
-                break;
-        }
-        
-        // TODO: 게임 결과 확인
-        switch (CheckGameResult())
-        {
-            case GameResult.Win:
-                // TODO: 승리 결과 표시
-                
-                break;
-            case GameResult.Lose:
-                // TODO: 패배 결과 표시
-                
-                break;
-            case GameResult.Draw:
-                // TODO: 비김 결과 표시
-                
-                break;
-            case GameResult.None:
-                // 게임이 종료되지 않았다면 턴 변경
-                var nextTurn = turnType == TurnType.PlayerA ? TurnType.PlayerB : TurnType.PlayerA;
-                SetTurn(nextTurn);
+                blockController.OnBlockClickedDelegate = (row, col) =>
+                {
+                    if (SetNewBoardValue(PlayerType.PlayerB, row, col))
+                    {
+                        var gameResult = CheckGameResult();
+                        if(gameResult == GameResult.None)
+                            SetTurn(TurnType.PlayerA);
+                        else
+                            EndGame(gameResult);
+                    }
+                    else
+                    {
+                        // TODO: 이미 있는 곳을 터치했을 때 처리
+                        Debug.Log("이미 있는 곳");
+                    }
+                };
                 break;
         }
     }
