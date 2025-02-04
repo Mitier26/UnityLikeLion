@@ -6,31 +6,177 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private BlockController blockController;
-    public enum PlayerType { None, PlayerA ,PlayerB }
-    
-    private PlayerType[,] _board;      // 틱택토 게임판의 정보를 담는 것
+
+    private enum PlayerType { None, PlayerA, PlayerB }
+
+    private PlayerType[,] _board; // 틱택토 게임판의 정보를 담는 것
+
+    private enum TurnType { PlayerA, PlayerB }
+
+    private enum GameResult { None, Win, Lose, Draw }
+
 
     private void Start()
     {
         // 게임 초기화
         InitGame();
-        
-        // 테스트 코드
-        blockController.OnBlockClickedDelegate = (row, col) =>
-        {
-            Debug.Log("Row : " + row + ", Col : " + col);
-        };
+
+
     }
 
     public void InitGame()
     {
         // 보드 초기화
         _board = new PlayerType[3, 3];
-        
+
         // 블록 초기화
         blockController.InitBlocks();
     }
+
+    /// <summary>
+    /// 게임 시작
+    /// </summary>
+    public void StartGame()
+    {
+        SetTurn(TurnType.PlayerA);
+    }
+
+    private void EndGame()
+    {
+
+    }
+
+    /// <summary>
+    /// _board에 새로운 값을 할당하는 함수
+    /// </summary>
+    /// <param name="playerType">할당하고자 하는 플레이어 타입</param>
+    /// <param name="row">Row</param>
+    /// <param name="col">Col</param>
+    /// <returns>False가 반환되면 할당할 수 없음, True는 할당이 완료 됨 </returns>
+    private bool SetNewBoardValue(PlayerType playerType, int row, int col)
+    {
+        if (playerType == PlayerType.PlayerA)
+        {
+            _board[row,col] = playerType;
+            blockController.PlaceMarker(Block.MarkerType.O, row, col);
+            return true;
+        }
+        else if (playerType == PlayerType.PlayerB)
+        {
+            _board[row, col] = playerType;
+            blockController.PlaceMarker(Block.MarkerType.X, row, col);
+            return true;
+        }
+        return false;
+        
+    }
+
+    private void SetTurn(TurnType turnType)
+    {
+        switch (turnType)
+        {
+            case TurnType.PlayerA:
+                // TODO: 입력 받기
+
+                blockController.OnBlockClickedDelegate = (row, col) =>
+                {
+                    SetNewBoardValue(PlayerType.PlayerA, row, col);
+                };
+                
+                break;
+            case TurnType.PlayerB:
+                // TODO: 입력 받기
+                
+                break;
+        }
+        
+        // TODO: 게임 결과 확인
+        switch (CheckGameResult())
+        {
+            case GameResult.Win:
+                // TODO: 승리 결과 표시
+                
+                break;
+            case GameResult.Lose:
+                // TODO: 패배 결과 표시
+                
+                break;
+            case GameResult.Draw:
+                // TODO: 비김 결과 표시
+                
+                break;
+            case GameResult.None:
+                // 게임이 종료되지 않았다면 턴 변경
+                var nextTurn = turnType == TurnType.PlayerA ? TurnType.PlayerB : TurnType.PlayerA;
+                SetTurn(nextTurn);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 게임 결과 확인 함수
+    /// </summary>
+    /// <returns>플레이어 기준 게임 결과</returns>
+    private GameResult CheckGameResult()
+    {
+        if (CheckGameWin(PlayerType.PlayerA)) { return GameResult.Win; }
+        if (CheckGameWin(PlayerType.PlayerB)) { return GameResult.Lose; }
+        if (IsAllBlocksPlaced()) { return GameResult.Draw; }
+
+        return GameResult.None;
+    }
     
-    
+    /// <summary>
+    /// 모든 마커가 보드에 배치되었는지 확인 하는 함수
+    /// </summary>
+    /// <returns></returns>
+    private bool IsAllBlocksPlaced()
+    {
+        for (var row = 0; row < _board.GetLength(0); row++)
+        {
+            for (var col = 0; col < _board.GetLength(1); col++)
+            {
+                if (_board[row, col] == PlayerType.None)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private bool CheckGameWin(PlayerType playerType)
+    {
+        // 가로로 마커가 일치하는지 확인
+        for (var row = 0; row < _board.GetLength(0); row++)
+        {
+            if (_board[row, 0] == playerType && _board[row, 1] == playerType && _board[row, 2] == playerType)
+            {
+                return true;
+            }
+        }
+        
+        // 세로로 마커가 일치하는지 확인
+        for (var col = 0; col < _board.GetLength(1); col++)
+        {
+            if (_board[0, col] == playerType && _board[1, col] == playerType && _board[2, col] == playerType)
+            {
+                return true;
+            }
+        }
+        
+        // 대각선 마커가 일치하는지 확인
+        if (_board[0, 0] == playerType && _board[1, 1] == playerType && _board[2, 2] == playerType)
+        {
+            return true;
+        }
+
+        if (_board[0, 2] == playerType && _board[1, 1] == playerType && _board[2, 0] == playerType)
+        {
+            return true;
+        }
+        
+        return false;
+    }
     
 }
