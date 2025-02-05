@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PanelManager : MonoBehaviour
 {
-    [SerializeField] private PanelController startPanelController;
     [SerializeField] private PanelController confirmPanelController;
     [SerializeField] private PanelController settingsPanelController;
 
@@ -20,9 +19,6 @@ public class PanelManager : MonoBehaviour
     {
         switch (panelType)
         {
-            case PanelType.StartPanel:
-                ShowPanelController(startPanelController);
-                break;
             case PanelType.ConfirmPanel:
                 ShowPanelController(confirmPanelController);
                 break;
