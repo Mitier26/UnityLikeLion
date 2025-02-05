@@ -6,8 +6,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private BlockController blockController;
-
-    [SerializeField] private GameObject startPanel;
+    [SerializeField] private PanelManager panelManager;
 
     private enum PlayerType { None, PlayerA, PlayerB }
 
@@ -33,6 +32,8 @@ public class GameManager : Singleton<GameManager>
 
         // 블록 초기화
         blockController.InitBlocks();
+        
+        panelManager.ShowPanel(PanelManager.PanelType.StartPanel);
     }
 
     /// <summary>
@@ -40,7 +41,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void StartGame()
     {
-        startPanel.SetActive(false);
         SetTurn(TurnType.PlayerA);
     }
     
