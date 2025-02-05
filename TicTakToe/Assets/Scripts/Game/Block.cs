@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Block : MonoBehaviour
 {
     [SerializeField] private Sprite oSprite;
@@ -12,12 +13,29 @@ public class Block : MonoBehaviour
     // 델리게이트의 형태, 중요한 것은 반환값, 매개변수
     // 대신 일을 할 것을 만든다.
     public delegate void OnBlockClicked(int index);
-    public OnBlockClicked onBlockClicked;
+    private OnBlockClicked _onBlockClicked;
     // event로 사용하고 싶다면 event 추가
     // blockClicked 에는 함수가 들어 있다.
     
     // 몇 번 버튼 인지 확인 할 변수
     private int _blockIndex;
+    private SpriteRenderer _spriteRenderer;
+    private Color _defaultColor;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _defaultColor = _spriteRenderer.color;
+    }
+
+    /// <summary>
+    /// 블럭의 색상을 변경하는 함수
+    /// </summary>
+    /// <param name="color">색상</param>
+    public void SetColor(Color color)
+    {
+        _spriteRenderer.color = color;
+    }
 
     /// <summary>
     /// Block 초기화 함수
@@ -28,7 +46,8 @@ public class Block : MonoBehaviour
     {
         _blockIndex = blockIndex;
         SetMarker(MarkerType.None);
-        this.onBlockClicked = onBlockClicked;
+        this._onBlockClicked = onBlockClicked;
+        SetColor(_defaultColor);
     }
     
     /// <summary>
@@ -54,7 +73,7 @@ public class Block : MonoBehaviour
     private void OnMouseUpAsButton()
     {
         // 해당 버튼을 클릭 된 상태에서 up 했을 때만 작동
-        onBlockClicked?.Invoke(_blockIndex);
+        _onBlockClicked?.Invoke(_blockIndex);
         // 몇 번이 클릭 되었는지 알아야 한다.
     }
 }
