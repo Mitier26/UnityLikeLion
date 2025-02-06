@@ -60,6 +60,6 @@ public class GameUIController : MonoBehaviour
 
     public void OnClickGameOverButton()
     {
-        
+        GameManager.Instance.ChangeToMainScene();
     }
 }

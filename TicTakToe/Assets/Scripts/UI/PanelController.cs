@@ -2,33 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
-[RequireComponent(typeof(RectTransform))]
+[RequireComponent(typeof(CanvasGroup))]
 public class PanelController : MonoBehaviour
 {
-    public bool IsShow {get; private set;}
+    [SerializeField] private RectTransform panelRectTransform;
     
-    public delegate void OnHide();
-    private OnHide _onHideDelegate;
-    
-    private RectTransform _rectTransform;
-    private Vector2 _hideAnchorPosition;
+    private CanvasGroup _backgroundCanvasGroup;
 
     private void Awake()
     {
-        _rectTransform = GetComponent<RectTransform>();
-        _hideAnchorPosition = _rectTransform.anchoredPosition;
-        IsShow = false;
+        _backgroundCanvasGroup = GetComponent<CanvasGroup>();
     }
 
     /// <summary>
     /// Panel 표시 함수
     /// </summary>
-    public void Show(OnHide onHideDelegate)
+    public void Show()
     {
-        _onHideDelegate = onHideDelegate;
-        _rectTransform.anchoredPosition = Vector2.zero;
-        IsShow = true;
+        _backgroundCanvasGroup.alpha = 0;
+        panelRectTransform.localScale = Vector3.zero;
+
+        _backgroundCanvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutBack);
+        panelRectTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
     }
 
     /// <summary>
@@ -36,8 +33,6 @@ public class PanelController : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        _rectTransform.anchoredPosition = _hideAnchorPosition;
-        IsShow = false;
-        _onHideDelegate?.Invoke();
+        Destroy(gameObject);
     }
 }
