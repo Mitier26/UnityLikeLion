@@ -24,8 +24,8 @@ public class PanelController : MonoBehaviour
         _backgroundCanvasGroup.alpha = 0;
         panelRectTransform.localScale = Vector3.zero;
 
-        _backgroundCanvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutBack);
-        panelRectTransform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+        _backgroundCanvasGroup.DOFade(1f, 0.5f).SetEase(Ease.OutBack);
+        panelRectTransform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
     }
 
     /// <summary>
@@ -33,6 +33,10 @@ public class PanelController : MonoBehaviour
     /// </summary>
     public void Hide()
     {
-        Destroy(gameObject);
+        _backgroundCanvasGroup.alpha = 1;
+        panelRectTransform.localScale = Vector3.one;
+        
+        _backgroundCanvasGroup.DOFade(0f, 0.3f).SetEase(Ease.InBack);
+        panelRectTransform.DOScale(0f, 0.3f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
     }
 }
