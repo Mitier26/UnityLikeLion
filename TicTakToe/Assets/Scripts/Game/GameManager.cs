@@ -76,6 +76,7 @@ public class GameManager : Singleton<GameManager>
     {
         // 게임 오버 표시
         _gameUIController.SetGameUIMode(GameUIController.GameUIMode.GameOver);
+        _blockController.OnBlockClickedDelegate = null;
         
         switch (gameResult)
         {
@@ -100,13 +101,15 @@ public class GameManager : Singleton<GameManager>
     /// <returns>False가 반환되면 할당할 수 없음, True는 할당이 완료 됨 </returns>
     private bool SetNewBoardValue(PlayerType playerType, int row, int col)
     {
-        if (playerType == PlayerType.PlayerA && _board[row, col] == PlayerType.None)
+        if(_board[row,col] != PlayerType.None) return false;
+        
+        if (playerType == PlayerType.PlayerA)
         {
             _board[row,col] = playerType;
             _blockController.PlaceMarker(Block.MarkerType.O, row, col);
             return true;
         }
-        else if (playerType == PlayerType.PlayerB  && _board[row, col] == PlayerType.None)
+        else if (playerType == PlayerType.PlayerB)
         {
             _board[row, col] = playerType;
             _blockController.PlaceMarker(Block.MarkerType.X, row, col);
@@ -144,9 +147,12 @@ public class GameManager : Singleton<GameManager>
             case TurnType.PlayerB:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
                 
+                // TODO : 계산 된 row, col 값
+                var result = AIController.FindNextMove(_board);
+                
                 _blockController.OnBlockClickedDelegate = (row, col) =>
                 {
-                    if (SetNewBoardValue(PlayerType.PlayerB, row, col))
+                    if (SetNewBoardValue(PlayerType.PlayerB, result.row, result.col))
                     {
                         var gameResult = CheckGameResult();
                         if(gameResult == GameResult.None)
