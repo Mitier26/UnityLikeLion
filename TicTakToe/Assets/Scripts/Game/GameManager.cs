@@ -149,10 +149,9 @@ public class GameManager : Singleton<GameManager>
                 
                 // TODO : 계산 된 row, col 값
                 var result = AIController.FindNextMove(_board);
-                
-                _blockController.OnBlockClickedDelegate = (row, col) =>
+                if (result.HasValue)
                 {
-                    if (SetNewBoardValue(PlayerType.PlayerB, result.row, result.col))
+                    if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
                     {
                         var gameResult = CheckGameResult();
                         if(gameResult == GameResult.None)
@@ -165,7 +164,11 @@ public class GameManager : Singleton<GameManager>
                         // TODO: 이미 있는 곳을 터치했을 때 처리
                         Debug.Log("이미 있는 곳");
                     }
-                };
+                }
+                else
+                {
+                    Debug.Log("AI가 더 이상 둘 곳이 없음");
+                }
                 break;
         }
     }
