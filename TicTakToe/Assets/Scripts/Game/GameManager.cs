@@ -23,8 +23,13 @@ public class GameManager : Singleton<GameManager>
     
     public enum GameType { SinglePlayer, DualPlayer }
 
+    private GameType _gameType;
+    
+    
+
     public void ChangeToGameScene(GameType gameType)
     {
+        _gameType = gameType;
         SceneManager.LoadScene("Game");
     }
 
@@ -146,29 +151,50 @@ public class GameManager : Singleton<GameManager>
                 break;
             case TurnType.PlayerB:
                 _gameUIController.SetGameUIMode(GameUIController.GameUIMode.TurnB);
-                
-                // TODO : 계산 된 row, col 값
-                // var result = AIController.FindNextMove(_board);
-                var result = MinimaxAIController.GetBestMove(_board);
-                if (result.HasValue)
+
+                if (_gameType == GameType.SinglePlayer)
                 {
-                    if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
+                    var result = MinimaxAIController.GetBestMove(_board);
+                    if (result.HasValue)
                     {
-                        var gameResult = CheckGameResult();
-                        if(gameResult == GameResult.None)
-                            SetTurn(TurnType.PlayerA);
+                        if (SetNewBoardValue(PlayerType.PlayerB, result.Value.row, result.Value.col))
+                        {
+                            var gameResult = CheckGameResult();
+                            if(gameResult == GameResult.None)
+                                SetTurn(TurnType.PlayerA);
+                            else
+                                EndGame(gameResult);
+                        }
                         else
-                            EndGame(gameResult);
+                        {
+                            // TODO: 이미 있는 곳을 터치했을 때 처리
+                            Debug.Log("이미 있는 곳");
+                        }
                     }
                     else
                     {
-                        // TODO: 이미 있는 곳을 터치했을 때 처리
-                        Debug.Log("이미 있는 곳");
+                        Debug.Log("AI가 더 이상 둘 곳이 없음");
                     }
+                    break;
                 }
-                else
+                else if(_gameType == GameType.DualPlayer)
                 {
-                    Debug.Log("AI가 더 이상 둘 곳이 없음");
+                    _blockController.OnBlockClickedDelegate = (row, col) =>
+                    {
+                        if (SetNewBoardValue(PlayerType.PlayerA, row, col))
+                        {
+                            var gameResult = CheckGameResult();
+                            if(gameResult == GameResult.None)
+                                SetTurn(TurnType.PlayerB);
+                            else
+                                EndGame(gameResult);
+                        }
+                        else
+                        {
+                            // TODO: 이미 있는 곳을 터치했을 때 처리
+                            Debug.Log("이미 있는 곳");
+                        }
+                    };
                 }
                 break;
         }

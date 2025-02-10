@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Block : MonoBehaviour
@@ -72,6 +73,7 @@ public class Block : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
+        if(EventSystem.current.IsPointerOverGameObject()) return;
         // 해당 버튼을 클릭 된 상태에서 up 했을 때만 작동
         _onBlockClicked?.Invoke(_blockIndex);
         // 몇 번이 클릭 되었는지 알아야 한다.
