@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     public DonutBar[] donutBars;
     
-    public static bool isSelected = false;
+    public bool isSelected = false;
     
     public List<GameObject> leftBar = new List<GameObject>();
     public List<GameObject> centerBar = new List<GameObject>();
@@ -24,18 +24,40 @@ public class GameManager : MonoBehaviour
     {
         for (int i = (int)e_HanoiLevel; i >= 1; i--)
         {
-            Vector3 createPos = new Vector3((int)DonutBar.BarType.LEFT, 3.5f, 0f);
-            GameObject donutObj = Instantiate(donutPerfab, createPos, Quaternion.identity);
-            donutObj.name = "Donut_" + i;
-            
-            donutObj.GetComponent<Donut>().donutNumber = i;
-            
-            donutObj.transform.localScale = Vector3.one * 5 * (i * 0.2f + 1f);
-            
-            donutBars[0].PushDonut(donutObj,false);
+            donutBars[0].PushDonut(CreatDonut(donutPerfab, i));
 
             yield return new WaitForSeconds(1f);
         }
     }
 
+    private GameObject CreatDonut(GameObject prefab, int i)
+    {
+        GameObject obj = Instantiate(prefab);
+        obj.transform.SetPositionAndRotation(new Vector3((int)DonutBar.BarType.LEFT, 3.5f, 0f), Quaternion.identity);
+        
+        obj.name = "Donut_" + i;
+        obj.GetComponent<Donut>().donutNumber = i;
+        obj.transform.localScale = Vector3.one * 5 * (i * 0.2f + 1f);
+
+        return obj;
+    }
+
+    public void OnShowAnswer()
+    {
+        ShowAnswer((int) e_HanoiLevel, 0, 1, 2);
+    }
+
+    private void  ShowAnswer(int count, int from, int temp, int to)
+    {
+        if (count == 0) return;
+        
+        if(count == 1)
+            Debug.Log($"{count}번 도넛을 {from}에서  {to}로 이동");
+        else
+        {
+            ShowAnswer(count-1, from, to, temp);
+            Debug.Log($"{count}번 도넛을 {from}에서  {to}로 이동");
+            ShowAnswer(count -1, temp, from, to);
+        }
+    }
 }
