@@ -70,10 +70,10 @@ public class ScrollViewController : MonoBehaviour
     
     private void ReloadData()
     {
-        // _viaibleCells 초기화
+        // _visibleCells 초기화
         _visibleCells = new LinkedList<Cell>();
         
-        // Contant의높이를 _items의 데이터의 수만큼 계산해서 높이를 지정
+        // Content의높이를 _items의 데이터의 수만큼 계산해서 높이를 지정
         var contentSizeDelta = _scrollRect.content.sizeDelta;
         contentSizeDelta.y = _items.Count * cellHeight;
         _scrollRect.content.sizeDelta = contentSizeDelta;
