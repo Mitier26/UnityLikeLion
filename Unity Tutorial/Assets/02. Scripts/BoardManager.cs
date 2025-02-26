@@ -15,8 +15,22 @@ public class BoardManager : MonoBehaviour
     public GameObject[] turrets;
     public GameObject currentTurret;
     public Button[] selectButtons;
+    
+    public GameObject[] prevTurrets;
+    
+    private int turretIndex;
+    private bool isSelected;
 
     private void Start()
+    {
+       for(int i = 0; i < selectButtons.Length; i++)
+       {
+           int index = i;
+           selectButtons[i].onClick.AddListener(() => OnSelectTurret(index));
+       }
+    }
+
+    public void CreateBorad()
     {
         tileArray = new int[boardSize.x, boardSize.y];
 
@@ -30,8 +44,10 @@ public class BoardManager : MonoBehaviour
         }
     }
     
-    void Update()
+    public void RayToBoard()
     {
+        if (!isSelected) return;
+        
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -46,10 +62,34 @@ public class BoardManager : MonoBehaviour
                     GameObject turretObj = Instantiate(turrets[0]);
                     turretObj.transform.position = new Vector3(x, 0, z);
 
-                    tileArray[x, z] = 1;
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        tileArray[x, z] = 1;
+                        currentTurret = turrets[turretIndex];
+                    }
                 }
             }
         }
+    }
+
+    private void CreateTurret(GameObject turretPrefb, int x, int y)
+    {
+        isSelected = false;
+        Destroy(currentTurret);
+        
+        if(tileArray[x, y] == 0)
+        {
+            GameObject turretObj = Instantiate(turretPrefb, this.transform);
+            turretObj.transform.position = new Vector3(x, 0, y);
+            tileArray[x, y] = 1;
+        }
+    }
+
+    private void OnSelectTurret(int index)
+    {
+        isSelected = true;
+        turretIndex = index;
+        currentTurret = prevTurrets[index];
     }
 
     public void OnChangeTurret(int index)

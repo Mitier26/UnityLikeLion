@@ -34,7 +34,7 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
             instance = this as T;
             DontDestroyOnLoad(this.gameObject);
         }
-        else
-            Destroy(this.gameObject);
+        // else
+            // Destroy(this.gameObject);
     }
 }
