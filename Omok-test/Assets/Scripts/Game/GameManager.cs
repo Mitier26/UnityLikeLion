@@ -10,18 +10,21 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject signinPanel;
     [SerializeField] private GameObject signupPanel;
     [SerializeField] private GameObject confirmPanel;
+    [SerializeField] private GameObject resultPanel;
 
     protected override void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         
         // 씬이 로드되면 캔버스를 찾아서 할당
-        _canvas = FindObjectOfType<Canvas>();   // Singleton awake에서 실행
+        _canvas = FindObjectOfType<Canvas>();
     }
     
     private void Start()
     {
         // 로그인
         // OpenSigninPanel();
+        
+        OpenResultPanel(20);
     }
     
     public void ChangeToGameScene()
@@ -98,5 +101,25 @@ public class GameManager : Singleton<GameManager>
         {
             var signupPanelObject = Instantiate(signupPanel, _canvas.transform);
         }
+    }
+    
+    public void OpenResultPanel(int finalScore)
+    {
+        if (_canvas != null)
+        {
+            var resultPanelObject = Instantiate(resultPanel, _canvas.transform);
+            resultPanelObject.GetComponent<ResultPanelController>().ShowResult(finalScore);
+        }
+    }
+
+    public void ShowTestAds()
+    {
+        AdsManager.Instance.ShowRewardedAd(() =>
+        {
+            Debug.Log("코인추가");
+        }, () =>
+        {
+            Debug.Log("ShowTestAds");
+        });
     }
 }
