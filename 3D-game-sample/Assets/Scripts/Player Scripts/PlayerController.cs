@@ -9,31 +9,21 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private static readonly int Move = Animator.StringToHash("Move");
-    private static readonly int Jump = Animator.StringToHash("JumpUp");
-    private static readonly int Back = Animator.StringToHash("Back");
-    private static readonly int JumpDown = Animator.StringToHash("JumpDown");
     private static readonly int Speed = Animator.StringToHash("Speed");
+    private static readonly int GroundDistance = Animator.StringToHash("GroundDistance");
 
     [SerializeField] private float rotateSpeed = 100f;
-    [SerializeField] private float jumpForce = 5;
+    [SerializeField] private float jumpForce = 3;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform cameraTransform;
     
     private CharacterController _characterController;
     private Animator _animator;
     
     private float _gravity = -9.81f;
-    
     private Vector3 _velocity;
     private float _groundDistance;
-
-    private bool isJump = false;
-    
-    // 이동 속도
-    private float speed = 0f;
-    [SerializeField] private float acceleration = 0.1f;
-    [SerializeField] private float brakeSpeed = 0.1f;
-    [SerializeField] private float speedMultiplier = 1f;
-
-    private bool _isGrounded;
+    private float _speed = 0f;
     private float _groundedMinDistance = 0.1f;
 
     private bool IsGrounded
@@ -68,8 +58,10 @@ public class PlayerController : MonoBehaviour
         }
         
         HandleMovement();
-        // ApplyGravity();
         CheckRun();
+        
+        // 점프 높이 설정
+        _animator.SetFloat(GroundDistance, GetDistanceToGround());
     }
 
     // 사용자 입력 처리 함수
@@ -77,9 +69,12 @@ public class PlayerController : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        
+        RotatePlayerToCameraForward();
 
         if (vertical > 0)
         {
+            RotatePlayerToCameraForward();
             _animator.SetBool(Move, true);
         }
         else
@@ -87,85 +82,38 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool(Move, false);
         }
         
-        _animator.SetFloat(Speed, speed);
-
-        if (vertical < 0)
-        {
-            _animator.SetBool(Back, true);
-        }
-        else
-        {
-            _animator.SetBool(Back, false);
-        }
-
-        
-        // 이동 속도 조절, 달리기
-        // if (Input.GetKey(KeyCode.LeftShift))
-        // {
-        //     speed += acceleration * Time.deltaTime;
-        // }
-        // else
-        // {
-        //     speed -= brakeSpeed * Time.deltaTime;
-        // }
-        //
-        // speed = Mathf.Clamp(speed, 0, 1);
-        //
-        // _animator.SetFloat("Speed", speed);
+        _animator.SetFloat(Speed, _speed);
 
         Vector3 movement = transform.forward * vertical;
         transform.Rotate(0, horizontal * rotateSpeed * Time.deltaTime, 0);
-        
-        // _characterController.Move(movement * (speed + speedMultiplier) * Time.deltaTime);
-        
-        // _groundDistance = GetDistanceToGround();
-        
-        // if (Input.GetButtonDown("Jump"))
-        // {
-        //     _velocity.y = Mathf.Sqrt(jumpForce * -2f * _gravity);
-        //     isJump = true;
-        //     _animator.SetBool(Jump, true);
-        // }
 
-        // if (isJump)
-        // {
-        //     if (_velocity.y < 0)
-        //     {
-        //         _animator.SetBool(Jump, false);
-        //         _animator.SetBool(JumpDown, true);
-        //     }
-        //
-        //     if (_groundDistance <= 0.5f && _velocity.y < 0)
-        //     {
-        //         isJump = false;
-        //         _animator.SetBool(JumpDown, false);
-        //         _animator.SetTrigger("Land");
-        //     }
-        // }
+        // 점프
+        if (Input.GetButtonDown("Jump") && IsGrounded)
+        {
+            _velocity.y = Mathf.Sqrt(jumpForce * -2f * _gravity);
+            _animator.SetTrigger("Jump2");
+        }
         
+        // 공격
+        if (Input.GetButtonDown("Fire1") && IsGrounded)
+        {
+            
+        }
     }
-
-    // 중력 적용 함수
-    // private void ApplyGravity()
-    // {
-    //     _velocity.y += _gravity * Time.deltaTime;
-    //     _characterController.Move(_velocity * Time.deltaTime);
-    // }
-    
     
     // 달리기 처리
     private void CheckRun()
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            speed += acceleration * Time.deltaTime;
+            _speed +=  Time.deltaTime;
         }
         else
         {
-            speed -= brakeSpeed * Time.deltaTime;
+            _speed -= Time.deltaTime;
         }
 
-        speed = Mathf.Clamp01(speed);
+        _speed = Mathf.Clamp01(_speed);
         
         // _animator.SetFloat("Speed", speed);
     }
@@ -175,7 +123,7 @@ public class PlayerController : MonoBehaviour
     {
         float maxDistance = 10f;
         if (Physics.Raycast(transform.position, 
-                Vector3.down, out RaycastHit hit, maxDistance))
+                Vector3.down, out RaycastHit hit, maxDistance, groundLayer))
         {
             return hit.distance;
         }
@@ -185,18 +133,57 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 카메라의 방향으로 캐릭터의 이동 방향을 설정
+    private void RotatePlayerToCameraForward()
+    {
+        
+        Vector3 cameraForward = cameraTransform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+        
+        // #1
+        // float targetAngle = Mathf.Atan2(cameraForward.x, cameraForward.z) * Mathf.Rad2Deg;
+        // float currentAngle = Mathf.Atan2(transform.position.x, transform.position.z) * Mathf.Rad2Deg;
+        // float angle = Mathf.DeltaAngle(currentAngle, targetAngle);
+        //
+        // transform.Rotate(0, angle, 0);
+        
+        // #2
+        // float dotProduct = Vector3.Dot(cameraTransform.forward, transform.forward);
+        // float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
+        
+        // #3
+        // Vector3 crossProduct = Vector3.Cross(cameraTransform.forward, transform.forward);
+        // float angle = Mathf.Asin(crossProduct.y) * Mathf.Rad2Deg;
+        
+        // Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
+        
+        // #4
+        Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation,  Time.deltaTime * 5f);
+    }
+
     #region Animator Methods
 
-    private void OnAnimationMove()
+    private void OnAnimatorMove()
     {
         Vector3 movePosition;
-
-        movePosition = _animator.deltaPosition;     // 애니메이션에서 이동한 거리
         
-        // 증력 적용
+        if (IsGrounded)
+        {
+            movePosition = _animator.deltaPosition;
+        }
+        else
+        {
+            movePosition = _characterController.velocity * Time.deltaTime;
+        }
+        
+        movePosition = _animator.deltaPosition;
+        
+        // 중력 적용
         _velocity.y += _gravity * Time.deltaTime;
-        movePosition.y = _velocity.y;
-
+        movePosition.y = _velocity.y * Time.deltaTime;
+        
         _characterController.Move(movePosition);
     }
     
