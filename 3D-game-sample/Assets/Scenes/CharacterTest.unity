@@ -324,6 +324,50 @@ MonoBehaviour:
   target: {fileID: 1321378764}
   rotationSpeed: 100
   distance: 5
+--- !u!1 &1056527116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1056527118}
+  - component: {fileID: 1056527117}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1056527117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056527116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92845ec1bb4df234a95637d2a60a0357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1056527118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056527116}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1094262441
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,6 +669,11 @@ Transform:
 --- !u!4 &1321378764 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1993213791089806862, guid: aae887e65df78ff4098dc4b997405cbf, type: 3}
+  m_PrefabInstance: {fileID: 2714265143485630223}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1426030761 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2562616946512140689, guid: aae887e65df78ff4098dc4b997405cbf, type: 3}
   m_PrefabInstance: {fileID: 2714265143485630223}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1546931002
@@ -949,10 +998,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ellen
       objectReference: {fileID: 0}
-    - target: {fileID: 6330915954493374807, guid: aae887e65df78ff4098dc4b997405cbf, type: 3}
-      propertyPath: cameraTransform
+    - target: {fileID: 6617512427087605585, guid: aae887e65df78ff4098dc4b997405cbf, type: 3}
+      propertyPath: headTransform
       value: 
-      objectReference: {fileID: 408738446}
+      objectReference: {fileID: 1321378764}
+    - target: {fileID: 6617512427087605585, guid: aae887e65df78ff4098dc4b997405cbf, type: 3}
+      propertyPath: leftHandTransform
+      value: 
+      objectReference: {fileID: 1426030761}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -967,3 +1020,4 @@ SceneRoots:
   - {fileID: 1094262447}
   - {fileID: 1546931006}
   - {fileID: 2714265143485630223}
+  - {fileID: 1056527118}

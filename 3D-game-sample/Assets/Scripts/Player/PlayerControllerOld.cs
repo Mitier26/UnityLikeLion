@@ -6,7 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-public class PlayerController : MonoBehaviour
+public class PlayerControllerOld : MonoBehaviour
 {
     private static readonly int Move = Animator.StringToHash("Move");
     private static readonly int Speed = Animator.StringToHash("Speed");
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private float _groundDistance;
     private float _speed = 0f;
     private float _groundedMinDistance = 0.1f;
+    private bool _isAttacking = false;
 
     private bool IsGrounded
     {
@@ -95,9 +96,9 @@ public class PlayerController : MonoBehaviour
         }
         
         // 공격
-        if (Input.GetButtonDown("Fire1") && IsGrounded)
+        if (Input.GetButtonDown("Fire1") && !_isAttacking)
         {
-            
+            _animator.SetTrigger("Attack");
         }
     }
     
@@ -185,6 +186,16 @@ public class PlayerController : MonoBehaviour
         movePosition.y = _velocity.y * Time.deltaTime;
         
         _characterController.Move(movePosition);
+    }
+
+    public void MeleeAttackStart()
+    {
+        _isAttacking = true;
+    }
+    
+    public void MeleeAttackEnd()
+    {
+        _isAttacking = false;
     }
     
 
