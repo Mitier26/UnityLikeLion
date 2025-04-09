@@ -91,4 +91,19 @@ public class PlayerControllerEditor : Editor
         
         EditorGUILayout.EndHorizontal();
     }
+    
+    private void OnEnable()
+    {
+        EditorApplication.update += OnEditorUpdate;
+    }
+    
+    private void OnDisable()
+    {
+        EditorApplication.update -= OnEditorUpdate;
+    }
+    
+    private void OnEditorUpdate()
+    {
+        if(target != null) Repaint();
+    }
 }

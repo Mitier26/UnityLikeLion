@@ -23,7 +23,7 @@ public class PlayerStateJump : MonoBehaviour, IPlayerState
         }
         else
         {
-            _playerController.Animator.SetFloat("Grounddistance", distanceToGround);
+            _playerController.Animator.SetFloat("GroundDistance", distanceToGround);
         }
     }
 
