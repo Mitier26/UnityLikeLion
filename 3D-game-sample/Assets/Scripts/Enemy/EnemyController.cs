@@ -31,6 +31,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float maxAttackDistance = 2f;
     public float MaxAttackDistance => maxAttackDistance;
     
+    public Renderer EnemyRenderer => enemyRenderer;
+    [SerializeField] private Renderer enemyRenderer;
+
+    [SerializeField] private HpBarController _hpBarController;
+    
     // -----
     // 상태
     private EnemyStateIdle _enemyStateIdle;
@@ -82,6 +87,7 @@ public class EnemyController : MonoBehaviour
         
         // HP 초기화
         _currentHealth = maxHealth;
+        _hpBarController.SetHP(_currentHealth/ (float)maxHealth);
         
         // 상태 초기화
         SetState(EnemyState.Idle);
@@ -108,9 +114,22 @@ public class EnemyController : MonoBehaviour
 
     #region Hit 관련
 
-    private void OnTriggerEnter(Collider other)
+    public void SetHit(PlayerController playerController)
     {
-        Debug.Log("Hit Trigger Enter");
+        var attackPower = playerController.AttackPower - defensePower;
+        _currentHealth -= attackPower;
+        
+        _hpBarController.SetHP(_currentHealth/ (float)maxHealth);
+
+        if (_currentHealth <= 0)
+        {
+            SetState(EnemyState.Dead);
+        }
+        else
+        {
+            _enemyStateHit.SetAttacker(playerController);
+            SetState(EnemyState.Hit);
+        }
     }
 
     #endregion

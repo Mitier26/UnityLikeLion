@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour, IObserver<GameObject>
 {
     [Header("Player")]
     [SerializeField] private int maxHealth = 100;
+    public int AttackPower => attackPower;
     [SerializeField] private int attackPower = 10;
 
     [Header("Movement")] 
@@ -168,12 +169,20 @@ public class PlayerController : MonoBehaviour, IObserver<GameObject>
     
     public void MeleeAttackStart()
     {
-        
+        if(CurrentState == PlayerState.Attack)
+        {
+            _playerStateAttack.IsAttacking = true;
+            _weaponController.AttackStart();
+        }
     }
     
     public void MeleeAttackEnd()
     {
-        
+        if(CurrentState == PlayerState.Attack)
+        {
+            _playerStateAttack.IsAttacking = false;
+            _weaponController.AttackEnd();
+        }
     }
 
     #endregion
@@ -208,6 +217,8 @@ public class PlayerController : MonoBehaviour, IObserver<GameObject>
         if (enemyController)
         {
             // EnemyController에게 "너 맞았어"라고 알림, 어느 방향에서, 어떤 힘으로 맞았는지
+            enemyController.SetHit(this);
+            
         }
     }
 
