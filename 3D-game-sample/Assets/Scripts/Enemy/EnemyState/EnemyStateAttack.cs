@@ -7,9 +7,7 @@ public class EnemyStateAttack : IEnemyState
     {
         _enemyController = enemyController;
         
-        _enemyController.EnemyAnimator.SetBool("Attack", true);
-
-        _enemyController.Agent.isStopped = true;
+        _enemyController.EnemyAnimator.SetTrigger("Attack");
     }
 
     public void Update()

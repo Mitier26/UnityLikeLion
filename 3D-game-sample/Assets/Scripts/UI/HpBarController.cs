@@ -7,11 +7,16 @@ using UnityEngine.UI;
 public class HpBarController : MonoBehaviour
 {
     [SerializeField] private Image _hpGauge;
+    [SerializeField] private bool isWorldCanvas;
 
     private void Update()
     {
-        var cameraTransform = Camera.main.transform;
-        transform.rotation = cameraTransform.rotation;
+        if (isWorldCanvas)
+        {
+            var cameraTransform = Camera.main.transform;
+            transform.rotation = cameraTransform.rotation;
+        }
+        
     }
 
     public void SetHP(float hp)

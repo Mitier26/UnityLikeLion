@@ -9,6 +9,7 @@ public class PlayerStateHit : MonoBehaviour, IPlayerState
     public void Enter(PlayerController playerController)
     {
         _playerController = playerController;
+        _playerController.Animator.SetTrigger("Hit");
     }
 
     // 해당 상태에 머물려 있을 때 Update 주기로 호출되는 메서드

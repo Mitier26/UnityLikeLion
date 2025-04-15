@@ -39,4 +39,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component
     }
 
     protected abstract void OnSceneLoaded(Scene scene, LoadSceneMode mode);
+    
+    protected abstract void OnSceneUnloaded(Scene scene);
 }
